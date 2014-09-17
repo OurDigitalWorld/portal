@@ -289,6 +289,7 @@ def facet_panel(facets, search_qs, site_language):
     feature_comment = facets['featureComment']
     feature_mystery = facets['featureMystery']
     decades = facets['fDateDecade']
+    rightsCreativeCommons = facets['rightsCreativeCommons']
     if site:
         facet_string += facet_list_anchors(site,
                                            'site',
@@ -358,6 +359,14 @@ def facet_panel(facets, search_qs, site_language):
                                 site_language['AdvLabelMystery'],
                                 str(feature_mystery[i+1])))
         facet_string += '</ul></fieldset>'
+
+
+    if rightsCreativeCommons:
+        facet_string += facet_list_anchors(rightsCreativeCommons,
+                                           'fcc',
+                                           'Creative Commons',
+                                           search_qs,
+                                           site_language)
     #print facetString
     facet_string += '</div>'
     return facet_string
@@ -378,13 +387,19 @@ def facet_list_anchors(list_name, portal_field, legend, search_qs, site_language
         #extra = (len(list_name)-6)/2
     for i in range(len(list_name)):
         if i % 2 == 1:
+            #process count
             countli = str(list_name[i])
             anchors += ' (<span title="%s">%s</span>)%s</li>' % (countli, countli, end_anchor)
         else:
+            # process label
             if portal_field == 'mt':
                 type_class = type_icons(list_name[i], 'class')
                 list_class = '<li class="%s">' % type_class
                 label = str(list_name[i]).title()
+            elif portal_field == 'fcc':
+                list_class = '<li>'
+                cclabel = str(list_name[i]).title()
+                label = '<img src="%s/img/%s.png" alt="%s" />' % (STATIC_URL, cclabel, cclabel)
             else:
                 label = str(list_name[i])
                 if i > 6:
