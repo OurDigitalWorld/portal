@@ -1,0 +1,32 @@
+{% extends "base_content_narrow.html" %}
+
+{% block head %}
+	{% include "Portal/snippets/head.html" with pageName=site_language.DetLabelContributors%}
+{% endblock head%}
+
+{%block content %}
+	<div id="content" class="content clearfix">
+		{% include "Portal/snippets/navigation.html" with pageName="contributors"%}
+		<div class="clearfix">
+				<h1>{{ site_language.DetLabelContributors }}</h1>
+		</div>
+		<div class="clearfix">
+			<div class="left50">
+			
+				<div class="unbulletedList">
+					<form method="get" action="results">
+                        <fieldset class="undecorated">
+							<legend>{{ site_language.DetLabelContributors }}</legend>
+						<ul>
+							{{ facetList|safe }}
+						</ul>
+                            </fieldset>
+						<br />
+						<input value="Search" type="submit"><input value="Clear" type="reset">
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+{%endblock content%}

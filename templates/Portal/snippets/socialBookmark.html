@@ -1,0 +1,31 @@
+{% if site_values.language == 'eng' %}
+<script type="text/javascript">
+	var addthis_config = {
+		ui_delay: 500,
+		ui_username: "ourontario",
+		ui_cobrand: "Our Ontario",
+		ui_header_color: "#ffffff",
+		ui_header_background: "#0147a7",
+		services_compact: 'email, facebook, google, twitter, more'
+	}
+</script>
+		
+<a href="http://www.addthis.com/bookmark.php?v=250&amp;username=ourontario"	class="addthis_button"><img src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125" height="16" alt="Share" /></a>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js" > </script>
+
+{% elif site_values.language == 'fre' %}
+<script type="text/javascript">
+	var addthis_config = {
+		ui_delay: 500,
+		ui_username: "ourontario",
+		ui_cobrand: "Our Ontario",
+	   	ui_language: "fr",
+		ui_header_color: "#ffffff",
+		ui_header_background: "#0147a7",
+		services_compact: 'email, facebook, google, twitter, more'
+	}
+</script>
+
+<a href="http://www.addthis.com/bookmark.php?v=250&amp;username=ourontario"	class="addthis_button"><img src="http://s7.addthis.com/static/btn/v2/lg-share-fr.gif" width="125" height="16" alt="Partager" /></a>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js" > </script>
+{% endif %}

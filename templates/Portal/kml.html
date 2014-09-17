@@ -1,0 +1,12 @@
+{% extends "base_content_narrow.html" %}
+
+{% block head %}
+	{% include "Portal/snippets/head.html" with pageName=site_language.kml_page_title%}
+{% endblock head%}
+
+{%block content %}
+	<div class="content clearfix">
+		{% include "Portal/snippets/navigation.html" with pageName="kml"%}
+		{{ site_language.kml_content_block|safe }}
+    </div>
+{%endblock content%}

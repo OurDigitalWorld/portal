@@ -1,0 +1,12 @@
+{% extends "base_content_narrow.html" %}
+
+{% block head %}
+	{% include "Portal/snippets/head_search.html" with pageName=site_language.NBLabelWidget%}
+{% endblock head%}
+
+{%block content %}
+	<div class="content clearfix">
+		{% include "Portal/snippets/navigation.html" with pageName="Search Widget"%}
+		{{ site_values.search_widget_content_block|safe }}
+    </div>
+{%endblock content%}

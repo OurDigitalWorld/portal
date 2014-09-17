@@ -1,0 +1,13 @@
+{% extends "base_content.html" %}
+
+{% block head %}
+	{% include "Portal/snippets/head_search.html" with pageName=site_language.NBLabelHelp%}
+{% endblock head%}
+
+{%block content %}
+	<div id="content" class="content clearfix">
+		{% include "Portal/snippets/navigation.html" with pageName="Help"%}
+	    {% include "Portal/snippets/searchPanel.html" %}
+		{{ site_values.help_content_block|safe }}
+    </div>
+{%endblock content%}

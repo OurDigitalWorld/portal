@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<head>
+	<title>{{ pageName }}: {{ site_values.site_name }}</title>
+	<meta name="author" content="{{ site_values.site_name }}" >
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="{% static "css/OurOntHeader2.css"%}" >
+	<link rel="stylesheet" type="text/css" href="{% static "css/views.css"%}" >
+	<link rel="shortcut icon" href="{{ site_values.Favicon }}" type="image/x-icon" >
+	<link rel="search" type="application/opensearchdescription+xml" title="OurOntario.ca" href="opensearch" >
+    {% include "Portal/snippets/google_analytics.html" %}
+ {% if header == "carousel" %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/jcarousel.basic.css"%}">
+	<link rel="stylesheet" type="text/css" href="{% static "css/OurOntHeader_search.css"%}">
+	<script type="text/javascript" src="{% static "js/jquery.js"%}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.jcarousel.min.js"%}"></script>
+	<script type="text/javascript" src="{% static "js/jcarousel.basic.js"%}"></script>
+
+	<script type="text/javascript">
+	$(function() {
+    	$('.jcarousel')
+    		.jcarousel({
+			    // Core configuration goes here
+			  	wrap: 'circular'
+        	})
+       		.jcarouselAutoscroll({
+            	interval: 12000,
+            	target: '+=1',
+            	autostart: true
+        	})
+    	;
+	});
+	</script>
+
+  {% endif %}
+</head>

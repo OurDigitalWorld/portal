@@ -1,0 +1,33 @@
+{% extends "base_content_narrow.html" %}
+
+{% block head %}
+	{% include "Portal/snippets/head.html" with pageName="Media Types"%}
+{% endblock head%}
+
+{%block content %}
+    <div id="content" class="content clearfix" xmlns="http://www.w3.org/1999/html">
+		{% include "Portal/snippets/navigation.html" with pageName="mediatype"%}
+		<div class="clearfix">
+				<h1>{{ mediaLabel }}</h1>
+		</div>
+		<div class="clearfix">
+			<div class="left50">
+			
+				<div class="unbulletedList">
+					<form method="get" action="results">
+                        <fieldset class="undecorated">
+							<legend>{{ mediaLabel }}</legend>
+						<ul>
+							{{ facetList|safe }}
+						</ul>
+                        </fieldset>
+						<br />
+                        <input type="hidden" name="mt" value="{{ request.mt }}" />
+						<input value="Search" type="submit"><input value="Clear" type="reset">
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</div>
+{%endblock content%}

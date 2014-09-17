@@ -1,0 +1,112 @@
+{% extends "base_content_narrow.html" %}
+
+
+{% block head %}
+    {% include "Portal/snippets/head.html" with pageName="Advanced Search"%}
+{% endblock head%}
+
+
+{%block content %}
+    {% include "Portal/snippets/navigation.html" with pageName="Advanced"%}
+<div  id="content" class="content clearfix" >
+    <div class="clearfix">
+        <h1>{{ site_language.AdvPageTitle }}</h1>
+    </div>
+
+    <form name="AdvSearch" method="get" action="results">
+    <div class="AdvSearchForm">
+        <fieldset id="keyword">
+            <legend>{{ site_language.AdvLabelKeyword }}</legend>
+            <div class="keyword">
+                <p><label for="q">{{ site_language.AdvLabelKeyword }}</label></p>
+                <input id="q" type="text" name="q" size="50" />
+            </div>
+        </fieldset>
+        <fieldset id="logic">
+            <legend>{{ site_language.AdvLabelKeywordOptions }}</legend>
+            <div class="logicblock">
+                <div class="logiclabel">{{ site_language.AdvLabelLogic }}:</div>
+                <ul >
+                    <li><input id="bland" checked="checked" type="radio" name="bl" value="and" />
+                    <label for="bland">{{ site_language.AdvLabelLogicAnd }}</label></li>
+                    <li><input type="radio" id="blor" name="bl" value="or" />
+                    <label for="blor">{{ site_language.AdvLabelLogicOr }}</label></li>
+                    <li><input id="blphrase" type="radio" name="bl" value="phrase" />
+                    <label for="blphrase">{{ site_language.AdvLabelLogicPhrase }}</label></li>
+                </ul>
+            </div>
+            <div class="logicblock">
+                <div class="logiclabel">{{ site_language.AdvLabelFields }}:</div>
+                <ul>
+                    <li><input checked="checked" id="stkw" type="radio" name="st" value="kw" />
+                    <label for="stkw">{{ site_language.AdvLabelFieldsAll }}</label></li>
+                    <li><input type="radio" id="stti" name="st" value="ti" />
+                    <label for="stti">{{ site_language.AdvLabelFieldsTitle }}</label></li>
+                    <li><input type="radio" id="stsu" name="st" value="su" />
+                    <label for="stsu">{{ site_language.AdvLabelFieldsSubject }}</label></li>
+                    <li><input type="radio" id="stau" name="st" value="au" />
+                    <label for="stau">{{ site_language.AdvLabelFieldsCreator }}</label></li>
+                </ul>
+            </div>
+            <div class="logicblock">
+                <div class="logiclabel">
+                    {{ site_language.AdvLabelFuzzy }}: (<a href="help#fuzzy">{{ site_language.AdvLabelFuzzyHint }}</a>)
+                </div>
+                <ul>
+                    <li><input id="fz0" checked="checked" type="radio" name="fz" value="0" />
+                    <label for="fz0">{{ site_language.AdvLabelFuzzyExact }}</label></li>
+                    <li><input id="fz1" type="radio" name="fz" value="1" />
+                    <label for="fz1">{{ site_language.AdvLabelFuzzyFuzzy }}</label></li>
+                    <li><input id="fz2" type="radio" name="fz" value="2" />
+                    <label for="fz2">{{ site_language.AdvLabelFuzzyFuzzier }}</label></li>
+                   <li> <input id="fz3" type="radio" name="fz" value="3" />
+                    <label for="fz3">{{ site_language.AdvLabelFuzzyFuzziest }}</label></li>
+                </ul>
+            </div>
+        </fieldset>
+        <fieldset id="contributor">
+            <legend>{{ site_language.AdvLabelContributor }}</legend>
+            <p><label for="site">{{ site_language.adv_contributor_intro }}:</label></p>
+            <select id="site" multiple name="site" size="1">
+                {{ siteList|safe }}
+            </select>
+        </fieldset>
+        <fieldset id="location">
+            <legend>{{ site_language.AdvLegendLocation }}</legend>
+            <p>
+                <label for="sp">{{ site_language.AdvLabelLocation }}:</label>
+                <input id="sp" type="text" name="sp" />
+            </p>
+             <p>(<a href="help#location">{{ site_language.AdvLabelLocationHint }}</a>)</p>
+        </fieldset>
+        <fieldset id="mediatype">
+            <legend>{{ site_language.AdvLegendMediaType }}</legend>
+            <div class="mediatype">
+                <p>{{ site_language.AdvLabelMedia }}:</p>
+            </div>
+            <ul class='unbulletedList'>
+                {{ mediaTypeList|safe }}
+            </ul>
+        </fieldset>
+        <div class="advsrchformbase">
+            <div class="logicblock">
+            <p><label for="rows">{{ site_language.AdvLabelResults }}:</label></p>
+                <select id="rows" name="rows">
+                    <option value="10">10</option>
+                    <option selected="selected" value="40">40</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                </select>
+            </div>
+            <div class="logicblock">
+                <p>
+                    <input type="submit" value="{{ site_language.AdvLabelSubmit }}" />
+                    <input type="reset" value="{{ site_language.AdvLabelReset }}" />
+                </p>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+{%endblock content%}
+

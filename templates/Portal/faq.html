@@ -1,0 +1,13 @@
+{% extends "base_content.html" %}
+
+{% block head %}
+	{% include "Portal/snippets/head_search.html" with pageName=site_language.faq_label_page %}
+{% endblock head%}
+
+{%block content %}
+	<div id="content" class="content clearfix">
+		{% include "Portal/snippets/navigation.html" with pageName="FAQ"%}
+	    {% include "Portal/snippets/searchPanel.html" %}
+		{{ site_values.faq_content_block|safe }}
+	</div>
+{%endblock content%}

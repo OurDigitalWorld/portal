@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{%block header %}
+<div class="clearfix" id="header">
+    <div class="searchheader_{{ site_values.language }} clearfix" id="searchheader_{{ site_values.language }}">
+        <h3>
+            <a href="{{ site_values.NBSiteHomeURL }}">{{ site_values.NBSiteHomeLabel }}</a>
+        </h3>
+        <h4>
+            <a href="search">{{ site_language.ResFacetNullSearchNew }}</a>
+        </h4>
+        <h4>
+            <a href="advsearch">{{ site_language.AdvPageTitle }}</a>
+
+        </h4>
+    </div>
+</div>
+{%endblock header%}

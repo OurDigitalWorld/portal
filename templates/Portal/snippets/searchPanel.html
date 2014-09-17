@@ -1,0 +1,13 @@
+{% load staticfiles %}
+<div class="clearfix">
+	<div id="search_{{ site_values.language }}">
+		<form action="results" method="get">
+			<div>
+				<label for="search_panel_q">{{ site_language.NBLabelSearchForm }} </label><input type="text" id="search_panel_q" name="q" class="search" size="30" /><input type="image" class="searchsubmit" src="{% static "img/search_submit_bg.png"%}" alt="{{ site_language.AdvLabelSubmit }}" /> <a href="advsearch" class="advanced">{{ site_language.AdvPageTitle }}</a>
+			</div>
+		</form>
+	</div>
+    <div class="contributor">
+        <a class="browse-contributor_{{ site_values.language }}" href="contributors">browse by contributor</a>
+    </div>
+</div>

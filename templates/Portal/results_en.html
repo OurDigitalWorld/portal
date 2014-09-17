@@ -1,0 +1,92 @@
+{% extends "base_content_narrow.html" %}
+{% load staticfiles %}
+{% block head %}
+	{% include "Portal/snippets/head.html" with pageName=site_language.NBLabelResults jquery="true"%}
+{% endblock head%}
+
+{%block content %}
+    {% include "Portal/snippets/navigation.html" with pageName="Results" %}
+    <div  id="content" class="content clearfix" >
+        <div class="right">
+            <div class="clearfix">
+                    <h1>Results </h1>
+            </div>
+            <div class="searchLogic">
+                We found <b class="count">{{ numFound }}</b>  matching items.<br>
+                {% if numFound > OriginalNumFound %}
+                    We couldn't find "{{ OriginalQ }}."  We substituted "{{ altCollation }}."<br/>
+                {% endif %}
+                {{ searchLogicString|safe }}
+            </div>
+         <img id="listview" src="{% static "img/view_list.gif"%}" alt="list"  title="list"/> &nbsp;
+         <img id="thumbListview" src="{% static "img/view_thumblist.gif"%}" alt="thumb list" title="thumb list" /> &nbsp;
+         <img id="2colview" src="{% static "img/view_2col.gif"%}" alt="2 columns" title="2 columns"/> &nbsp;
+         <img id="galleryview" src="{% static "img/view_gallery.gif"%}" alt="gallery" title="gallery"/> &nbsp;
+            <div class="pagination">
+                {{ pageNavBar|safe }}
+            </div>
+    {% if numFound > 0 %}
+        <div class="content">
+            <div id="resultList" class="single">
+                {{ docs|safe }}
+            </div>
+         </div>
+            <div class="pagination">
+                {{ pageNavBar|safe }}
+            </div>
+        </div>
+        <div class="left ">
+            <form method="get" action="results" name="Search" class="easyform">
+                <fieldset class="externalResults">
+                    <legend >Web Tools</legend>
+                    <div class="social">
+                        <script type="text/javascript">
+
+                            var addthis_config = {
+                                ui_delay: 500,
+                                ui_username: "ourontario",
+                                ui_cobrand: "Our Ontario",
+                                ui_header_color: "#ffffff",
+                                ui_header_background: "#0147a7",
+                                services_compact: 'email, delicious, digg, facebook, friendfeed, google, reddit, stumbleupon, technorati,  twitter, more'
+                            }
+                        </script>
+                        <a href="http://www.addthis.com/bookmark.php?v=250&amp;username=ourontario" class="addthis_button"><img src="http://s7.addthis.com/static/btn/v2/lg-share-en.gif" width="125" height="16" alt="Share"></a>
+                        <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+                    </div>
+                    {% if KMLCount > 0 %}
+                        <br>
+                        <a href="OO-{% now "Y-m-d-G-i-s" %}.kml?{{ searchQ }}"><img src="http://images.ourontario.ca/glib/googleearth.gif" alt="Google Earth"> Google Earth
+                        </a><a href="http://www.ourontario.ca/kml.html">
+                        [help]
+                    </a>
+                    {% endif %}
+                </fieldset>
+                <fieldset>
+                    <legend>Search within these results</legend>
+                    <input size="20" name="q" class="q" type="text" />
+                    <input value="Go" name="submit" type="submit" />
+                    {{ facetQ|safe }}
+                </fieldset>
+
+                {{ facetPanels|safe }}
+                {% if AltDocsCount > 0 %}
+                <fieldset class="externalResults">
+                    <legend>More Results</legend>
+                    <ul class="options">
+                        <li>If you had searched the Ontario Government documents collections, you would have found
+                               <a href="{{ AltDocsURL }}=" target="_blank">{{ AltDocsCount }}</a> items.
+                               </li>
+                    </ul>
+                </fieldset>
+                {% endif %}
+            </form>
+        </div>
+    {% else %}
+        </div>
+        <!--  TODO floating into the wrong position -->
+        <div class="noResults">No Results were found.</div>
+    {% endif %}
+    </div>
+
+{%endblock content%}

@@ -1,0 +1,160 @@
+{% load staticfiles %}
+<head>
+	<title>{{  pageName }}: {{ site_values.site_name }}</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+	<meta name="author" content="{{ site_values.site_name }}" />
+	<link rel="stylesheet" type="text/css" href="{% static "css/OurOntHeader2.css"%}" />
+	<link rel="stylesheet" type="text/css" href="{% static "css/views.css"%}" />
+	<link rel="shortcut icon" href="{{ site_values.Favicon }}" type="image/x-icon" />
+	<link rel="search" type="application/opensearchdescription+xml" title="OurOntario.ca" href="opensearch" />
+    {% include "Portal/snippets/google_analytics.html" %}
+	{% if pageName == "Results"%}
+	<link rel="unapi-server" type="application/xml" title="unAPI" href="unapi" />
+	<link rel="alternate" type="application/rss+xml" title="{{  pageName }}" href="rss?{{ unparsedQuery }}&amp;p={{ page }}" id="gallery" />
+	{% endif %}
+    {% if jquery == "true" %}
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" src="{% static "js/jquery.tinysort.min.js"%}">   </script>
+
+    {% if javascript_page == "Results"%}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('#site-more').show();
+                $('#site-less').hide();
+                $('#site-numeric').hide();
+                $('#site-sort li[class="moreli"]').hide();
+                $('#site-less').click(function() {
+                    $('#site-more').show();
+                    $('#site-less').hide();
+                    $('#site-sort li[class="moreli"]').hide();
+                });
+                $('#site-more').click(function() {
+                    $('#site-more').hide();
+                    $('#site-less').show();
+                    $('#site-sort li[class="moreli"]').show();
+                });
+                $('#site-alpha').click(function() {
+                    $('ul#site-sort>li').tsort();
+                    $('#site-alpha').hide();
+                    $('#site-numeric').show();
+                });
+                $('#site-numeric').click(function() {
+                    $('ul#site-sort>li').tsort('span',{order:'desc', attr:'title'});
+                    $('#site-numeric').hide();
+                    $('#site-alpha').show();
+                });
+                $('#site ul li a').click(function() {
+                    location.href = $(this).attr('href');
+                });
+                 /**/
+                $('#lc-more').show();
+                $('#lc-less').hide();
+                $('#lc-numeric').hide();
+                $('#lc-sort li[class="moreli"]').hide();
+                $('#lc-less').click(function() {
+                    $('#lc-more').show();
+                    $('#lc-less').hide();
+                    $('#lc-sort li[class="moreli"]').hide();
+                });
+                $('#lc-more').click(function() {
+                    $('#lc-more').hide();
+                    $('#lc-less').show();
+                    $('#lc-sort li[class="moreli"]').show();
+                });
+                $('#lc-alpha').click(function() {
+                    $('ul#lc-sort>li').tsort();
+                    $('#lc-alpha').hide();
+                    $('#lc-numeric').show();
+                });
+                $('#lc-numeric').click(function() {
+                    $('ul#lc-sort>li').tsort('span',{order:'desc', attr:'title'});
+                    $('#lc-numeric').hide();
+                    $('#lc-alpha').show();
+                });
+                $('#lc ul li a').click(function() {
+                    location.href = $(this).attr('href');
+                });
+                $('#grn-more').show();
+                $('#grn-less').hide();
+                $('#grn-numeric').hide();
+                $('#grn-sort li[class="moreli"]').hide();
+                $('#grn-less').click(function() {
+                    $('#grn-more').show();
+                    $('#grn-less').hide();
+                    $('#grn-sort li[class="moreli"]').hide();
+                });
+                $('#grn-more').click(function() {
+                    $('#grn-more').hide();
+                    $('#grn-less').show();
+                    $('#grn-sort li[class="moreli"]').show();
+                });
+                $('#grn-alpha').click(function() {
+                    $('ul#grn-sort>li').tsort();
+                    $('#grn-alpha').hide();
+                    $('#grn-numeric').show();
+                });
+                $('#grn-numeric').click(function() {
+                    $('ul#grn-sort>li').tsort('span',{order:'desc', attr:'title'});
+                    $('#grn-numeric').hide();
+                    $('#grn-alpha').show();
+                });
+                $('#grn ul li a').click(function() {
+                    location.href = $(this).attr('href');
+                });
+                $('#itype-more').show();
+                $('#itype-less').hide();
+                $('#itype-numeric').hide();
+                $('#itype-sort li[class="moreli"]').hide();
+                $('#itype-less').click(function() {
+                    $('#itype-more').show();
+                    $('#itype-less').hide();
+                    $('#itype-sort li[class="moreli"]').hide();
+                });
+                $('#itype-more').click(function() {
+                    $('#itype-more').hide();
+                    $('#itype-less').show();
+                    $('#itype-sort li[class="moreli"]').show();
+                });
+                $('#itype-alpha').click(function() {
+                    $('ul#itype-sort>li').tsort();
+                    $('#itype-alpha').hide();
+                    $('#itype-numeric').show();
+                });
+                $('#itype-numeric').click(function() {
+                    $('ul#itype-sort>li').tsort('span',{order:'desc', attr:'title'});
+                    $('#itype-numeric').hide();
+                    $('#itype-alpha').show();
+                });
+                $('#itype ul li a').click(function() {
+                    location.href = $(this).attr('href');
+                });
+                 $( "#listview" ).on( "click", function( event ) {
+                    //alert( "Hello listview." );
+                    $('#resultList').attr('class', 'list')
+                });
+                $( "#thumbListview" ).on( "click", function( event ) {
+                    //alert( "Hello thumbListview." );
+                    $('#resultList').attr('class', 'single')
+                });
+                $( "#galleryview" ).on( "click", function( event ) {
+                    //alert( "Hello galleryview." );
+                    $('#resultList').attr('class', 'gallery')
+                });
+                $( "#2colview" ).on( "click", function( event ) {
+                    //alert( "Hello galleryview." );
+                    $('#resultList').attr('class', 'double')
+                });
+                $( "#multi_site" ).on( "click", function( event ) {
+                    //alert( "Hello multisite request." );
+                    window.location = '{{ alt_url }}'
+                });
+                $( "#single_site" ).on( "click", function( event ) {
+                    //alert( "Hello single site request." );
+                    window.location = '{{ alt_url }}'
+                });
+
+            });
+        </script>
+        {% endif %}
+    {% endif %}
+</head>
