@@ -26,6 +26,7 @@ facetURL = ('&fl=id,title,titleSort,thumbnail,url,localid,description,'
             '&facet.field=featureComment'
             '&facet.field=featureMystery'
             '&facet.field=fDateDecade'
+            '&facet.field=rightsCreativeCommons'
             '&f.fDateDecade.facet.sort=index'
             '&facet.field=fDateYear'
             '&f.fDateYear.facet.sort=index'
@@ -137,6 +138,13 @@ def solr_query(request, xml_type, search_set):
             query_str += query_s
         else:
             query_dict['fm'] = ''
+        if nvps.__contains__('fcc'):
+            (query_s,
+             return_str,
+             facet_form_str) = parse_nvp(nvps, 'fcc', 'rightsCreativeCommons', '', query_dict)
+            query_str += query_s
+        else:
+            query_dict['fcc'] = ''
         latitude_search_q = '+itemLatitude:[*+TO+*]'
         if xml_type == 'kml':
             query_str += latitude_search_q
@@ -336,6 +344,8 @@ def search_logic(response_query_dict, site_language):
         logic += logic_label(site_language['AdvLabelBetweenDatesBefore'], qd['db'], site_language)
     if qd.get('dt'):
         logic += logic_label('Date ', qd['dt'], site_language)
+    if qd.get('fcc'):
+        logic += logic_label('Creative Commons ', qd['fcc'], site_language)
 
     #print 'searchLogic2: strLogic: %s' % strLogic
     return logic

@@ -9,8 +9,6 @@ from ODWPortal.querySolr import solr_query, get_search_set
 from ODWPortal.utilities import get_doc_block
 from Portal.settings import SOLR_URL
 
-
-
 def alt_search(site_id, requestQ, action, search_set):
     return_list = []
     #TODO:  suppress search if q is empty (not point of asking for everything
@@ -27,7 +25,8 @@ def alt_search(site_id, requestQ, action, search_set):
             #TODO: get site name from Sites
             AltBaseURL = '%ssearch/select/?wt=json' % SOLR_URL
             ext_query_str = local_queryStr.replace(alt_search_set, '')
-            AltPreferredResultsURL = '%sresults?%s' % (alt_site.alt_site_url, ext_query_str)  #different because we're doing an internal lookup
+            AltPreferredResultsURL = '%sresults?%s' % (alt_site.alt_site_url, ext_query_str)
+            #different because we're doing an internal lookup
             #print("AltSearchURL 1: ", AltSearchURL)
         else:
             local_queryStr = AltQueryStr
@@ -36,7 +35,8 @@ def alt_search(site_id, requestQ, action, search_set):
         alt_dict = {'label': alt_site.alt_site_label}
         if action == 'count':
             #print(alt_site.alt_site_label)
-            AltDocsCount, AltDocsURL, AltDocsResults = getAltSearch(local_queryStr, AltBaseURL, AltResultsURL, action, '')
+            AltDocsCount, AltDocsURL, AltDocsResults = getAltSearch(
+                local_queryStr, AltBaseURL, AltResultsURL, action, '')
             alt_dict.update({'count': AltDocsCount})
             alt_dict.update({'url': AltDocsURL})
             return_list.append(alt_dict)
@@ -119,7 +119,7 @@ def getAltSearch(queryStr, AltBaseURL, AltResultsURL, action, search_syntax):
         if AltDocsCountParsableXML == 'error!':
             #something stupid happened with the url
             one = 1
-        elif AltDocsCountParsableXML.isdigit() == True:
+        elif AltDocsCountParsableXML.isdigit():
             # if a raw number
             AltDocsCount = AltDocsCountParsableXML
         elif re.search('numFound=', AltDocsCountParsableXML):

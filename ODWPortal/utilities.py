@@ -565,7 +565,7 @@ def get_decades(facets, search_qs, site_language):
             if dec.isdigit():
                 dec_int = int(dec)
                 if len(dec) == 3:
-                    dec = dec+'0'
+                    dec = '%s0' % dec
                     dec_int = dec_int * 10
                 if dec_int > 1500:
                     decades.append(dec)
