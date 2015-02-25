@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 from django.utils.http import urlquote
 from ODWPortal.utilities import get_media_label
 
-#constants
+# constants
 defaultRows = 20
 facetURL = ('&fl=id,title,titleSort,thumbnail,url,localid,description,'
             'site,type,featureComment,featureMystery,bibliographicCitation,'
@@ -43,14 +43,13 @@ facetURL = ('&fl=id,title,titleSort,thumbnail,url,localid,description,'
             '&hl.simple.post=</b>'
             '&spellcheck.extendedResults=true'
             '&spellcheck.count=10')
-#
 
 
 def solr_query(request, xml_type, search_set):
     """
     parses request values and aligns them with the related solr fields
     request is derived from GET object
-    xmlType:  kml, extAltSearch, vitaAltSearch, count, xml
+    xmlType:  extAltSearch, vitaAltSearch, count, xml
             (where xml is ordinary search)
     returns a queryString value for searching solr, and a
         tuned queryDict with the search values
@@ -145,12 +144,6 @@ def solr_query(request, xml_type, search_set):
             query_str += query_s
         else:
             query_dict['fcc'] = ''
-        latitude_search_q = '+itemLatitude:[*+TO+*]'
-        if xml_type == 'kml':
-            query_str += latitude_search_q
-            kml_query_str = ''
-        else:
-            kml_query_str = query_str+ latitude_search_q
 
         if xml_type == 'count':
             query_str += '+%s' % search_set
@@ -158,7 +151,6 @@ def solr_query(request, xml_type, search_set):
             query_str += '+%s%s' % (search_set, facetURL)
 
         if spell_q:
-            #spellQ = spellQ.replace(' ', '+')
             query_str += '&spellcheck.q=%s~0.5' % urlquote(spell_q)
 
         if xml_type == 'kml':
@@ -174,9 +166,6 @@ def solr_query(request, xml_type, search_set):
             page = int(request.__getitem__('p'))
             start = (page - 1) * rows
             query_str += '&start=%s&p=%s' % (start, page)
-        #TODO need dictionary of inbound field values (e.g. 'bl')
-        # and corresponding content to process as unparsed query (DONE),
-        # as query set for facet search and for results display (part DONE
     return query_str, query_dict
 
 
@@ -188,7 +177,7 @@ def parse_q(nvps, query_dict):
     spell_q = ''
     if nvps.__contains__('q'):
         query = nvps.getlist('q')
-        #if multiple values for 'q' join into space delimited string
+        # if multiple values for 'q' join into space delimited string
         query_merge = ' '.join(query)
         query_merge = query_merge.replace('  ', ' ')
         query_merge = query_merge.strip()
@@ -196,7 +185,7 @@ def parse_q(nvps, query_dict):
         spell_q = query_merge
         query_dict['spellcheck.q'] = query_merge
         if len(query_merge) > 0:
-            #if fz > 0 then insert modifiers
+            # if fz > 0 then insert modifiers
             if nvps.__contains__('fz'):
                 fz = nvps.__getitem__('fz')
                 if fz == '1':
@@ -212,26 +201,24 @@ def parse_q(nvps, query_dict):
                     query_dict['fz'] = fz
             else:
                 query_dict['fz'] = ''
-            #if bl == 'or' then insert ' OR '
+            # if bl (boolean) == 'or' then insert ' OR '
             if nvps.__contains__('bl'):
                 bl = nvps.__getitem__('bl')
                 if bl == 'or':
                     query_merge = query_merge.replace(' ', ' OR ')
                 elif bl == 'phrase':
-                    #do something else
                     query_merge = '"%s"' % query_merge
                 if bl != 'and':
                     query_dict['bl'] = bl
             else:
                 query_dict['bl'] = ''
-            #if st (structured query)  narrow search by field
+            # if st (structured query)  narrow search by field
             if nvps.__contains__('st'):
                 st = nvps.__getitem__('st')
                 if st == 'ti':
                     query_merge = 'title:%s' % query_merge
                 if st == 'su':
                     query_merge = 'subject:%s' % query_merge
-                    # TODO test HPL metadata for creator using 'Henley' search
                 if st == 'au':
                     query_merge = '((creator:%s) OR (contributor:%s))' % (query_merge, query_merge)
                 if st == 'ac':
@@ -250,7 +237,7 @@ def parse_q(nvps, query_dict):
         query_dict['q'] = ''
 
     if nvps.__contains__('q2'):
-        #q2 already prepped
+        # q2 (previous query) should already prepped
         q2 = nvps.__getitem__('q2')
         if query:   # append to query
             query_merge = '(%s) AND %s' % (query_merge, q2)
@@ -260,10 +247,8 @@ def parse_q(nvps, query_dict):
         query_dict['q2'] = ''
 
     query_dict['q2'] = query_merge
-    queryStr = urlquote(query_merge)
-    #queryStr = queryMerge
-    #TODO return returnStr/facetFormStr as a dictionary and then parse into appropriate HTML
-    return queryStr, return_str, facet_form_str, spell_q
+    query_string = urlquote(query_merge)
+    return query_string, return_str, facet_form_str, spell_q
 
 
 def parse_nvp(nvps, search_field, solr_field, boolean, query_dict):
@@ -271,10 +256,10 @@ def parse_nvp(nvps, search_field, solr_field, boolean, query_dict):
     return_str = ''
     query_str = ''
     value_list = nvps.getlist(search_field)
-    #TODO the following two lines are a complete hack to deal
+    # the following two lines are a complete hack to deal
     # with zero length "lists" being returned
     if len(value_list) == 1 and len(value_list[0]) == 0:
-        nothing = 0
+        zero = 0
     else:
         if boolean == 'or':
             value = '" OR "'.join(value_list)
@@ -305,12 +290,8 @@ def search_logic(response_query_dict, site_language):
             logic += '<b>%s:</b> ' % site_language['AdvLabelKeyword']
     if qd.get('q2'):
         q2 = qd['q2']
-        #print 'searchLogic1: q2: %s' % q2
         q2 = q2.replace('+', ' ')
         q2 = urllib.parse.unquote(q2)
-        #print 'searchLogic2: q2: %s' % q2
-        #q2 = q2.replace('%20', ' ')
-        #q2 = q2.replace('%22', '"')
         logic += q2 + '&#160;&#160;'
     if qd.get('fz'):
         fz = qd['fz']
@@ -346,8 +327,6 @@ def search_logic(response_query_dict, site_language):
         logic += logic_label('Date ', qd['dt'], site_language)
     if qd.get('fcc'):
         logic += logic_label('Creative Commons ', qd['fcc'], site_language)
-
-    #print 'searchLogic2: strLogic: %s' % strLogic
     return logic
 
 
@@ -394,7 +373,6 @@ def get_search_set(site_values):
     if 'record_owner' in site_values:
         ro = site_values['record_owner']
         search_set += 'recordOwner:(%s)' % urllib.parse.quote(ro)
-    #print("SolrQuery(337): ", search_set)
     return search_set
 
 

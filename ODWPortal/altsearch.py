@@ -4,144 +4,139 @@ import urllib
 import re
 import json
 import xmltodict
-from ODWPortal.models import SiteAlternateSearches, SiteSetup
+from ODWPortal.models import site_alternate_searches, SiteSetup
 from ODWPortal.querySolr import solr_query, get_search_set
 from ODWPortal.utilities import get_doc_block
 from Portal.settings import SOLR_URL
 
 
-
-def alt_search(site_id, requestQ, action, search_set):
+def alt_search(site_id, request_q, action):
     return_list = []
-    #TODO:  suppress search if q is empty (not point of asking for everything
-    alt_site_search_set = SiteAlternateSearches.objects.filter(site=site_id).order_by('site_order')
-    AltQueryStr, AltQueryDict = solr_query(requestQ, 'extAltSearch', "")
-    #print("original search_set:", search_set)
+    alt_site_search_set = site_alternate_searches.objects.filter(site=site_id).order_by('site_order')
+    alt_query_string, alt_query_dict = solr_query(request_q, 'extAltSearch', "")
     for alt_site in alt_site_search_set:
-        AltPreferredResultsURL = ''
+        alt_preferred_results_url = ''
         if alt_site.alt_site_id:
             alt_search_set = alt_site_lookup(alt_site.alt_site_id)
-            #print("alt_search_set:", alt_search_set)
-            local_queryStr, local_QueryDict = solr_query(requestQ, 'extAltSearch', alt_search_set)
-            #print("local_queryStr:", local_queryStr)
-            #TODO: get site name from Sites
-            AltBaseURL = '%ssearch/select/?wt=json' % SOLR_URL
-            ext_query_str = local_queryStr.replace(alt_search_set, '')
-            AltPreferredResultsURL = '%sresults?%s' % (alt_site.alt_site_url, ext_query_str)  #different because we're doing an internal lookup
-            #print("AltSearchURL 1: ", AltSearchURL)
+            local_querystr, local_querydict = solr_query(request_q, 'extAltSearch', alt_search_set)
+            altbaseurl = '%ssearch/select/?wt=json' % SOLR_URL
+            ext_query_str = local_querystr.replace(alt_search_set, '')
+            alt_preferred_results_url = '%sresults?%s' % (alt_site.alt_site_url, ext_query_str)
+            #        different because we're doing an internal lookup
         else:
-            local_queryStr = AltQueryStr
-            AltBaseURL = alt_site.alt_site_url
-            AltResultsURL = AltBaseURL  # the same url because the multisearch and the user are searching externally
+            local_querystr = alt_query_string
+            altbaseurl = alt_site.alt_site_url
+            altresultsurl = altbaseurl  # the same url because the multisearch and the user are searching externally
         alt_dict = {'label': alt_site.alt_site_label}
         if action == 'count':
-            #print(alt_site.alt_site_label)
-            AltDocsCount, AltDocsURL, AltDocsResults = getAltSearch(local_queryStr, AltBaseURL, AltResultsURL, action, '')
-            alt_dict.update({'count': AltDocsCount})
-            alt_dict.update({'url': AltDocsURL})
+            altdocscount, alt_docs_url, altdocsresults = get_alt_search(
+                local_querystr,
+                altbaseurl,
+                altresultsurl,
+                action,
+                ''
+            )
+            alt_dict.update({'count': altdocscount})
+            alt_dict.update({'url': alt_docs_url})
             return_list.append(alt_dict)
         elif action == 'results':
-            #print("AltSearchURL2: ", AltSearchURL)
-            AltDocsCount, AltDocsURL, AltDocsResults = getAltSearch(local_queryStr, AltBaseURL, AltResultsURL, action, alt_site.alt_site_syntax)
-            alt_dict.update({'count': AltDocsCount})
-            if AltPreferredResultsURL:
-                alt_dict.update({'url': AltPreferredResultsURL})
+            altdocscount, alt_docs_url, altdocsresults = get_alt_search(
+                local_querystr,
+                altbaseurl,
+                altresultsurl,
+                action,
+                alt_site.alt_site_syntax
+            )
+            alt_dict.update({'count': altdocscount})
+            if alt_preferred_results_url:
+                alt_dict.update({'url': alt_preferred_results_url})
             else:
-                alt_dict.update({'url': AltDocsURL})
-            alt_dict.update({'results': AltDocsResults})
-            if int(AltDocsCount) > 3:
+                alt_dict.update({'url': alt_docs_url})
+            alt_dict.update({'results': altdocsresults})
+            if int(altdocscount) > 3:
                 alt_dict.update({'more': True})
             else:
                 alt_dict.update({'more': False})
 
             return_list.append(alt_dict)
-    #print(return_list)
     return return_list
 
 
-def getAltSearch(queryStr, AltBaseURL, AltResultsURL, action, search_syntax):
-    AltDocsCount = 0
-    if queryStr:
-        #TODO production gov docs/portal fail on phrase searches with ampersands/%26
-        queryStr = queryStr.replace('+&+', '+')
-        queryStr = queryStr.replace('+%26+', '+')
-        queryStr = queryStr.replace('%20%26%20', '+')
+def get_alt_search(query_string, alt_base_url, alt_results_url, action, search_syntax):
+    alt_docs_count = 0
+    altdocs = ''
+    alt_docs_results = ''
+    if query_string:
+        # production gov docs/portal fail on phrase searches with ampersands/%26
+        query_string = query_string.replace('+&+', '+')
+        query_string = query_string.replace('+%26+', '+')
+        query_string = query_string.replace('%20%26%20', '+')
 
         # prep URL for passing as link to user
-        AltResultsURL = "%sresults?%s" % (AltResultsURL, queryStr)
-        #print('AltResultsURL getAltSearch(72): ', AltResultsURL)
+        alt_results_url = "%sresults?%s" % (alt_results_url, query_string)
         # do internal searches for count or results
         if action == "count":
-            if SOLR_URL in AltBaseURL:
-                AltCountURL = "%s&%s&rows=0" % (AltBaseURL,queryStr)
-                #print('AltCountURL (77): ', AltCountURL)
+            if SOLR_URL in alt_base_url:
+                altcounturl = "%s&%s&rows=0" % (alt_base_url, query_string)
             else:
-                AltCountURL = "%scount?%s" % (AltBaseURL,queryStr)
-                #print('AltCountURL (80): ', AltCountURL)
-            AltDocs = getAltDocs(AltCountURL)
-            #print(AltDocs)
+                altcounturl = "%scount?%s" % (alt_base_url, query_string)
+            altdocs = get_alt_docs(altcounturl)
         elif action == "results":
-            if SOLR_URL in AltBaseURL:
-                AltDocsURL = "%s&%s&rows=3" % (AltBaseURL, queryStr)
+            if SOLR_URL in alt_base_url:
+                alt_docs_url = "%s&%s&rows=3" % (alt_base_url, query_string)
             else:
-                #utter hack to deal with solr 1.4 json not escaping unparsedQuery  ... i.e. GovDocs
-                if '%22' in queryStr:
-                    queryStr = queryStr.replace("%22",'')
-                    queryStr += '&bl=phrase'
-                AltDocsURL = "%s%s?%s&rows=3" % (AltBaseURL,search_syntax, queryStr)
-            AltDocs = getAltDocs(AltDocsURL)
+                # utter hack to deal with solr 1.4 json not escaping unparsedQuery  ... i.e. GovDocs
+                if '%22' in query_string:
+                    query_string = query_string.replace("%22", '')
+                    query_string += '&bl=phrase'
+                alt_docs_url = "%s%s?%s&rows=3" % (alt_base_url, search_syntax, query_string)
+            altdocs = get_alt_docs(alt_docs_url)
             if search_syntax == "rss.xml":
-                AltDocsDecode = AltDocs[0].decode(encoding='UTF-8')
-                AltDocsResults = xmltodict.parse(AltDocsDecode)
+                alt_docs_decode = altdocs[0].decode(encoding='UTF-8')
+                alt_docs_results = xmltodict.parse(alt_docs_decode)
             else:
-                AltDocsResults = AltDocs
+                alt_docs_results = altdocs
                 try:
-                    AltDocsResults = (AltDocsResults[0].decode(encoding='UTF-8'))
+                    alt_docs_results = (alt_docs_results[0].decode(encoding='UTF-8'))
                 except UnicodeDecodeError:
-                    AltDocsResults = (AltDocsResults[0].decode(encoding="ISO-8859-1"))
-                AltDocsResults = json.loads(AltDocsResults)
-            if 'solr' in AltDocsResults:
-                AltDocsCount = AltDocsResults['solr']['json']['response']['numFound']
-                count_docs = int(AltDocsCount)
+                    alt_docs_results = (alt_docs_results[0].decode(encoding="ISO-8859-1"))
+                alt_docs_results = json.loads(alt_docs_results)
+            if 'solr' in alt_docs_results:
+                alt_docs_count = alt_docs_results['solr']['json']['response']['numFound']
+                count_docs = int(alt_docs_count)
                 if count_docs > 0:
-                    docs = AltDocsResults['solr']['json']['response']['docs']
-                    AltDocsResults= get_doc_block(docs, "", "", "", "eng")
-                    #print("AltDocsResults (107): ", docs)
-            elif AltDocsResults['response']['numFound']:
-                AltDocsCount = AltDocsResults['response']['numFound']
-                count_docs = int(AltDocsCount)
+                    docs = alt_docs_results['solr']['json']['response']['docs']
+                    alt_docs_results = get_doc_block(docs, "", "", "", "eng")
+            elif alt_docs_results['response']['numFound']:
+                alt_docs_count = alt_docs_results['response']['numFound']
+                count_docs = int(alt_docs_count)
                 if count_docs > 0:
-                    docs = AltDocsResults['response']['docs']
-                    #print(docs)
-                    AltDocsResults= get_doc_block(docs, "", "", "", "eng")
-                    #print("AltDocsResults (115): ",docs)
-            #print(AltDocsCount)
-        #AltDocsCountParsableXML = AltDocs[0].decode(encoding='UTF-8')
+                    docs = alt_docs_results['response']['docs']
+                    alt_docs_results = get_doc_block(docs, "", "", "", "eng")
         try:
-            AltDocsCountParsableXML = (AltDocs[0].decode(encoding='UTF-8'))
+            alt_docs_count_parsable_xml = (altdocs[0].decode(encoding='UTF-8'))
         except UnicodeDecodeError:
-            AltDocsCountParsableXML = (AltDocs[0].decode(encoding="ISO-8859-1"))
-        if AltDocsCountParsableXML == 'error!':
-            #something stupid happened with the url
+            alt_docs_count_parsable_xml = (altdocs[0].decode(encoding="ISO-8859-1"))
+        if alt_docs_count_parsable_xml == 'error!':
+            # something stupid happened with the url
             one = 1
-        elif AltDocsCountParsableXML.isdigit() == True:
+        elif alt_docs_count_parsable_xml.isdigit():
             # if a raw number
-            AltDocsCount = AltDocsCountParsableXML
-        elif re.search('numFound=', AltDocsCountParsableXML):
-            #if a solr xml response
-            count_object = re.search('numFound=\"(\d.*?)\"', AltDocsCountParsableXML)
+            alt_docs_count = alt_docs_count_parsable_xml
+        elif re.search('numFound=', alt_docs_count_parsable_xml):
+            # if a solr xml response
+            count_object = re.search('numFound=\"(\d.*?)\"', alt_docs_count_parsable_xml)
             if count_object:
-                AltDocsCount = count_object.group(1)
-        elif re.search('numFound\":', AltDocsCountParsableXML):
-            #if a solr json response
-            count_object = re.search('numFound\":(\d.*?),', AltDocsCountParsableXML)
+                alt_docs_count = count_object.group(1)
+        elif re.search('numFound\":', alt_docs_count_parsable_xml):
+            # if a solr json response
+            count_object = re.search('numFound\":(\d.*?),', alt_docs_count_parsable_xml)
             if count_object:
-                AltDocsCount = count_object.group(1)
-    return AltDocsCount, AltResultsURL, AltDocsResults
+                alt_docs_count = count_object.group(1)
+    return alt_docs_count, alt_results_url, alt_docs_results
 
 
-def getAltDocs(url):
-    #print("url: ", url)
+def get_alt_docs(url):
     try:
         conn = urllib.request.urlopen(url)
         rdata = []
@@ -150,19 +145,17 @@ def getAltDocs(url):
             chunk = conn.read()
             if chunk:
                 rdata.append(chunk)
-        AltDocs = rdata
+        alt_docs = rdata
         conn.close()
     except IOError:
-        #print 'Cannot open <strong class="highlight">URL</strong> %s for reading' % url
-        AltDocs = 'error!'
-    return AltDocs
+        alt_docs = 'error!'
+    return alt_docs
+
 
 def alt_site_lookup(site_id):
     site_values = SiteSetup.objects.filter(site_id=site_id)
     site_dict = {}
-    #print("site values: ", site_values)
     for f in site_values:
-       #print("function settings: " + f.afield + ":" + f.avalue)
-       site_dict[f.afield] = f.avalue
+        site_dict[f.afield] = f.avalue
     alt_search_set = get_search_set(site_dict)
     return alt_search_set

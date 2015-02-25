@@ -4,9 +4,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
      url(r'^(?i)$', 'Portal.views.index', name='index'),
-     #TODO 301 the 'search' page to start page; redirect to preferred url
      url(r'^(?i)search$', 'Portal.views.index', name='index'),
      url(r'^(?i)advsearch$', 'Portal.views.advsearch', name='advsearch'),
      url(r'^(?i)about', 'Portal.views.about', name='about'),
@@ -18,7 +16,6 @@ urlpatterns = patterns('',
      url(r'^(?i)searchwidgets', 'Portal.views.searchwidgets', name='searchwidgets'),
      url(r'^(?i)searchwidget.html', 'Portal.views.searchwidget', name='searchwidget'),
      url(r'^(?i)resultsXML', 'Portal.views.results_xml', name='results2'),
-     #TODO 301 the 'resultXML' page to start page; redirect to preferred url
      url(r'^(?i)resultXML', 'Portal.views.results_xml', name='results2'),
      url(r'^(?i)results', 'Portal.views.results', {"result_type": "single"}, name='results'),
      url(r'^(?i)resultm', 'Portal.views.results', {"result_type": "multipane"}, name='results'),

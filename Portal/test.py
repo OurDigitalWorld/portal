@@ -169,8 +169,7 @@ class URLTest(TestCase):
         self.assert_equal(response['Content-Type'], 'application/xml')
         self.assertContains(response, '</records>')
 
-#class ExternalURLFunctions:
-    #test externalurl Functions
+    # test externalurl Functions
     def assert_equal(self, status_code, param, **kwargs):
         pass
 

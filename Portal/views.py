@@ -11,8 +11,6 @@ from Portal.hostdiscovery import site_settings, site_language
 def index(request):
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
-    #print(site_lang['page_name_search'])
-    #print(site_values['language'])
     context = {
         'site_values': site_values,
         'site_language': site_lang,
@@ -51,7 +49,7 @@ def help_request(request):
 
 
 def searchwidgets(request):
-    #the options page
+    # the options page
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
     context = {
@@ -62,7 +60,7 @@ def searchwidgets(request):
 
 
 def searchwidget(request):
-    #the linkable widget
+    # the linkable widget
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
     context = {
@@ -157,10 +155,10 @@ def results(request, result_type):
     else:
         original_q = ''
 
-    #do we need to try again with the spelling suggestions
+    # do we need to try again with the spelling suggestions
     tried_alt_spelling = False
     if not num_found_int:
-        #look to see if there are alternate spellings and run again with those
+        # look to see if there are alternate spellings and run again with those
         suggestions = solr_response['spellcheck']['suggestions']
         i = suggestions.index(u'correctlySpelled')
         correctly_spelled = suggestions[i+1]
@@ -171,10 +169,7 @@ def results(request, result_type):
                 request_q2 = request_q.copy()
                 request_q2.__setitem__('q', alt_collation)
 
-                #re-execute search
-                #TODO discover why returned QueryDict => facet panel is
-                # retaining the original q value
-                #TODO discover why multiple terms generating errors
+                # re-execute search
                 (solr_response,
                  num_found,
                  rows,
@@ -183,30 +178,19 @@ def results(request, result_type):
                  facets,
                  query_dict_2) = ODWPortal.externalurls.get_docs(request_q2, search_set)
                 num_found_int = int(num_found)
-                #PartsQ, PartsQD = solr_query(request_q2, 'extAltSearch', search_set)
                 search_logic_string = search_logic(query_dict_2, site_lang)
                 search_q, just_q = search_query(query_dict_2)
-            else:
-                #we found no result and no alternate spelling
-                #TODO: render an empty results page with a suitable message
-                one = 1
-        else:
-            one = 2
     else:
-        #PartsQ, PartsQD = solr_query(request_q, 'extAltSearch', search_set)
         search_logic_string = search_logic(query_dict, site_lang)
-        #print('searchLogicString(144): ', searchLogicString)
         search_q, just_q = search_query(query_dict)
     if site_values['use_external_links'] == '1':
         alt_search_results = alt_search(
             site_values['site_id'],
             request_q,
-            'results',
-            search_set)
+            'results')
     else:
         alt_search_results = ''
 
-    # Check for number of records for search criteria with lat/long values and
     kml_count = ODWPortal.externalurls.get_kml_count(request.GET, search_set)
     docs = solr_response['response']['docs']
     highlighting = solr_response['highlighting']
@@ -321,8 +305,9 @@ def count(request):
     search_set = get_search_set(site_values)
     result_count = ODWPortal.externalurls.get_count(request.GET, search_set)
     mime_str = "text/plain"
-    #using the xml template because we can drop in a raw response, in this case just an integer
+    # using the xml template because we can drop in a raw response, in this case just an integer
     return render(request, "Portal/xml.html", {"solrResponse": result_count}, content_type=mime_str)
+
 
 def unapi(request):
     site_values = site_settings(request)

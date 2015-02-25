@@ -10,30 +10,12 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys, os
-#some debug code=============
-#print("__name__ =", __name__)
-#print("__file__ =", __file__)
-#print("os.getpid() =", os.getpid())
-#print("os.getcwd() =", os.getcwd())
-#print("os.curdir =", os.curdir)
-#print("sys.path =", repr(sys.path))
-#print("sys.modules.keys() =", repr(sys.modules.keys()))
-#if 'Portal' in sys.modules:
-#  print("sys.modules['Portal'].__name__ =", sys.modules['Portal'].__name__)
-#  print("sys.modules['Portal'].__file__ =", sys.modules['Portal'].__file__)
-#  print("os.environ['DJANGO_SETTINGS_MODULE'] =", os.environ.get('DJANGO_SETTINGS_MODULE', None))
 
-#====end debug code ====
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'y_3usk(029@kl(&iexj(yio9k$lxb+8*hm4*gxd@z*8+79+&i@'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
@@ -41,15 +23,13 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 TEMPLATE_DIRS = (
-    "E:/django/Portal/templates"
+    "/Users/walter/PycharmProjects/Portal/templates"
 )
-
 STATICFILES_DIRS = (
-    "E:/django/Portal/static",
+    "/Users/walter/PycharmProjects/static",
 )
-
 FIXTURE_DIRS = (
-    'E:/django/Portal/fixtures/',
+    '/Users/walter/PycharmProjects/Portal/fixtures/',
 )
 # Application definition
 
@@ -60,9 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #extra modules via pip
     'south',
-    #local apps
+    # local apps
     'ODWPortal',
 )
 
@@ -92,7 +71,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -101,7 +79,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'HalM$10',
         'HOST': '127.0.0.1',
-        'PORT': '10864',
+        'PORT': '5432',
     }
 }
 # Internationalization
@@ -123,7 +101,7 @@ USE_TZ = True
 
 STATIC_URL = 'http://images.ourontario.ca/static/'
 GRAPHICS_URL = 'http://graphics.OurOntario.ca/'
-SOLR_URL = 'http://localhost:8082/solr481/'
-XSL_PATH = 'E:/django/static/Portal/'
+SOLR_URL = 'http://localhost:8983/solr481/'
+XSL_PATH = '/Users/walter/Documents/Python/OOPortal/xslt/'
 
 SITE_ID = 1

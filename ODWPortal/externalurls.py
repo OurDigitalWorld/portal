@@ -10,7 +10,6 @@ solr = '%ssearch/select/?wt=json' % SOLR_URL
 solr_xml = '%ssearch/select/?' % SOLR_URL
 
 
-#TODO exactly the same code as get_parts ... reconcile
 def get_solr(url, output_format):
     try:
         conn = urllib.request.urlopen(url)
@@ -27,7 +26,6 @@ def get_solr(url, output_format):
             str1 = json.loads(str_response)
         conn.close()
     except IOError:
-        #print 'Cannot open <strong class="highlight">URL</strong> %s for reading' % url
         str1 = 'error!'
     if isinstance(str1, list):
         return_value = str1[0]
@@ -79,7 +77,6 @@ def html_list(display, labels, counts, portal_field, result_path, site_language)
             label = get_media_label(l.title(), site_language)
         else:
             label = l
-            #asdfl;kj = ur
         query = urlquote(l)
         if label:
             html += (('<li>'
@@ -93,12 +90,19 @@ def html_list(display, labels, counts, portal_field, result_path, site_language)
                       '</a>'
                       '</label> (%s)'
                       '</li>')
-                      % (portal_field, ''.join(l.split(' ')),
+                      % (portal_field,
+                         ''.join(l.split(' ')),
                          display,
-                         portal_field, l,
-                         portal_field, ''.join(l.split(' ')),
-                         result_path, portal_field, query,
-                         label, c))
+                         portal_field,
+                         l,
+                         portal_field,
+                         ''.join(l.split(' ')),
+                         result_path,
+                         portal_field,
+                         query,
+                         label,
+                         c)
+                     )
     return html
 
 
@@ -131,7 +135,7 @@ def media_facet(request, result_path, search_set):
                          '<label for="%s">%s</label>'
                          '</a>'
                          ' (%s)</li>'
-                         % ( ''.join(l.split(' ')), l, result_path, item_type, media_type, ''.join(l.split(' ')), l, c))
+                         % (''.join(l.split(' ')), l, result_path, item_type, media_type, ''.join(l.split(' ')), l, c))
             return html
     else:
         return ''
@@ -183,21 +187,16 @@ def get_docs(request, search_set):
     return solr_response, num_found, rows, page_num, docs, facets, query_dict
 
 
-# TODO:  consider dropping this function ... results.xml output
 def get_html(request, querystring, lang, search_set):
     solr_response_list = query_solr_url(request, 'xml', 'stuff', search_set)
     response_doc = solr_response_list[0]
-    #print 'passing through XML land'
     xml_doc = etree.parse(response_doc)
-    #print lang
     if lang == 'fr':
         xsl_file = '%ssearch_result_fr.xsl' % XSL_PATH
     else:
         xsl_file = '%ssearch_result_min.xsl' % XSL_PATH
-    #print xslFile    
-    styledoc = etree.parse(xsl_file)
-    #print styledoc
-    style = etree.XSLT(styledoc)
+    style_doc = etree.parse(xsl_file)
+    style = etree.XSLT(style_doc)
     qs = "'%s'" % querystring
     param_page = etree.XSLT.strparam("1")
     param_unparsed_query = etree.XSLT.strparam(qs)
@@ -211,17 +210,13 @@ def get_xml(request, xml_type, search_set):
     Supports DC, MODS, RDF, KML and SOLR.
     """
     solr_response_list = query_solr_url(request, 'xml', xml_type, search_set)
-    #print('solrResponseList: ', solrResponseList)
     response_doc = solr_response_list[0]
     str_response_doc = response_doc.decode('utf-8')
     str_response_doc = str_response_doc.replace('<?xml version="1.0" encoding="UTF-8"?>\n', '')
-    #print('str_response_doc: ', str_response_doc)
     if xml_type != "solr":
         xml_doc = etree.XML(str_response_doc)
-        #print xmlDoc
         xsl_file = '%s%s.xsl' % (XSL_PATH, xml_type)
         style_doc = etree.parse(xsl_file)
-        #print styledoc
         style = etree.XSLT(style_doc)
         xml_transformed = style(xml_doc)
     else:
@@ -259,7 +254,6 @@ def get_pref_collation(suggestions):
                 suggestion_dict2 = item
                 hits = int(suggestion_dict2.get('freq'))
                 collation = suggestion_dict2.get('word')
-                #print(collation,": ", hits)
                 if hits > top_hits:
                     top_hits = hits
                     pref_collation = collation
