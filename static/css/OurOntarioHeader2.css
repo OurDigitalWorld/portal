@@ -1,0 +1,1640 @@
+/* OurOntario - Django version - June2014
+************************************************** */
+html {font-size: 62.5%;}
+
+body {
+	font: 1.2em "Lucida Grande", Geneva, Verdana, sans-serif;
+	background: #ffffff;
+	/*background: #ffffff url("http://ourontario.ca/static/img/body_bg2.png") no-repeat top center;*/
+	color: #555555;
+	text-align: center;
+	margin: 0;
+	border-top: 1px solid #ffffff;
+}
+
+/* OPACITY NOTE  
+************************************************** 
+for any of the roll-over opactity calls, there need to be three (3) unique calls so that ALL browsers see & respond. 
+The ORDER is NB....If you don’t use this order, IE8-as-IE7 doesn’t apply the opacity, although IE8 and a pure IE7 do.
+Unfortunately most code validators will vomit over at least one of these formats... sigh.
+// for IE 8
+		-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+// for IE 5-7
+		filter: alpha(opacity=50);
+// for all other browsers
+		opacity: .8;
+
+ **************************************************  */
+
+
+/* HEADER (formerly #boiler from Boiler.css)
+************************************************** */
+
+div.accessibility {
+	display: none;
+	}
+
+#header {
+	width: 897px;
+	margin: 10px auto 0;
+	text-align: left;
+	}
+			
+.alert {
+	color:red;
+}				
+				
+.alert.b {
+	color:red;
+	font-weight: bold;
+}				
+
+a {
+	color: #144599; text-decoration: none;
+	}
+			
+a:hover {
+	text-decoration: underline;
+}
+a:visited {
+	color: #15148f; 
+	text-decoration: none;
+	}
+	
+img {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	}
+
+.inline {
+	display: inline;
+}
+inline {
+	display: inline;
+}
+
+/* BROWSE (ENG) & (FRE)
+************************************************** */
+
+ul#browse_eng, ul#browse_fre {
+	list-style-type: none;
+	height: 219px;
+	width:160px;
+	float:right;
+	padding: 5px 0 0;
+	margin: 0;
+	}
+	
+/* BROWSE (ENG)
+************************************************** */
+ul#browse_eng li {
+	margin: 0;
+	padding: 0;
+				}
+ul#browse_eng li a {
+	display: block;
+	width: 100%;
+	height: 36px;
+	padding: 0;
+	border: 0;
+	text-indent: -9999em;
+	overflow: hidden;
+	}
+ul#browse_eng li a:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	opacity: 0.8;
+	}
+				
+			/*a.browse-audio_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_audio_bg.png") no-repeat top left;}*/
+a.browse-audio_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_audio_bg.png") no-repeat top left;}
+a.browse-collection_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_collection_bg.png") no-repeat top left;}
+a.browse-exhibit_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_exhibits_bg.png") no-repeat top left;}
+a.browse-images_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_images_bg.png") no-repeat top left;}
+a.browse-object_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_object_bg.png") no-repeat top left;}
+a.browse-text_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_text_bg.png") no-repeat top left;}
+a.browse-video_eng {background: transparent url("http://ourontario.ca/static/img/browse_sub_video_bg.png") no-repeat top left;}	
+
+				
+/* BROWSE (FRE)
+************************************************** */
+ul#browse_fre li {
+	margin: 0;
+	padding: 0;
+	}
+ul#browse_fre li a {
+	display: block;
+	width: 100%;
+	height: 36px;
+	padding: 0;
+	border: 0;
+	text-indent: -9999em;
+	overflow: hidden;
+	}
+ul#browse_fre li a:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	opacity: 0.8;				
+	}
+	
+a.browse-audio_fre {background: transparent url("http://ourontario.ca/static/img/browse_sub_audio_bg_f.png") no-repeat top left;}
+a.browse-collection_fre {background: transparent url("http://ourontario.ca/static/img/browse_sub_collection_bg_f.png") no-repeat top left;}						
+a.browse-images_fre {background: transparent url("http://ourontario.ca/static/img/browse_sub_images_bg_f.png") no-repeat top left;}
+a.browse-object_fre {background: transparent url("http://ourontario.ca/static/img/browse_sub_object_bg_f.png") no-repeat top left;}
+a.browse-text_fre {background: transparent url("http://ourontario.ca/static/img/browse_sub_text_bg_f.png") no-repeat top left;}
+a.browse-video_fre {background: transparent url("http://ourontario.ca/static/img/browse_sub_video_bg_f.png") no-repeat top left;}
+
+
+/* FLASH 			
+************************************************** */
+#flash_eng {
+	width: 735px;
+	height: 219px;
+	margin: 1px 0;
+	float: left;
+	background: url("http://ourontario.ca/static/img/flash2_bg.jpg") no-repeat top left;
+	padding-right: 1px;
+}
+
+/* FLASH (fr)			
+************************************************** */
+#flash_fre {
+	width: 735px;
+	height: 219px;
+	margin: 1px 0;
+	float: left;
+	background: url("http://ourontario.ca/static/img/flash2_bg_fre.jpg") no-repeat top left;
+	padding-right: 1px;
+}
+
+/* SEARCH BOX (ENG)  - dropped to be below Navbar
+************************************************** */
+.searchbox {
+	width: 897px;
+	height: 43px;
+	float: left;
+	display: inline;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	}
+	
+#search_eng {
+	width: 731px;
+	height: 43px;
+	float: left;
+	background: #d4d4d4 url("http://ourontario.ca/static/img/search_bg.png") no-repeat top left;
+	margin-bottom: 20px;
+	}
+#search_eng form {
+	margin: 0;
+	padding: 0;
+	}
+#search_eng fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	}
+#search_eng label {
+	display: block;
+	float: left;
+	text-indent: -9999em;
+	height: 43px;
+	width: 90px;
+	background: transparent url("http://ourontario.ca/static/img/search_label_bg.png") no-repeat top left;
+	}
+
+#search_eng input.searchsubmit {
+	display: block;
+	float: left;
+	height: 43px;
+	width: 41px;
+	background: transparent url("http://ourontario.ca/static/img/search_submit_bg.png") no-repeat top left;
+	}
+#search_eng input.search {
+	margin: 8px 0 0 0;
+	display: block;
+	float: left;
+	border: 1px solid #acacac;
+	color: inherit;
+	font-size: inherit;
+	vertical-align: middle;
+	height: 25px;
+	width: 432px;
+	}
+#search_eng a.advanced {
+	text-indent: -9999em;
+	display: block;
+	float: right;
+	height: 43px;
+	width: 134px;
+	background: transparent url("http://ourontario.ca/static/img/search_advanced_bg.png") no-repeat top left;
+	}
+#search_eng a.advanced:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+	opacity: 0.6;				
+	} 
+	
+.contributor a.browse-contributor_eng {
+	background: transparent url("http://ourontario.ca/static/img/browse_sub_contributor_bg.png") no-repeat top left;
+	text-indent: -9999em;
+	font-size: 3em;
+	width: 160px;
+	margin-bottom: 20px;	
+	max-height: 43px;
+	overflow: hidden;
+	float: left;
+	}
+.contributor a.browse-contributor_eng:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	opacity: 0.8;
+	}
+
+/* SEARCH BOX (FR)  - dropped to be below Navbar
+************************************************** */
+#search_fre {
+	width: 735px;
+	height: 43px;
+	float: left;
+	background: #d4d4d4 url("http://ourontario.ca/static/img/search_bg.png") no-repeat top left;
+	margin-bottom: 20px;	
+	}
+#search_fre form {
+	margin: 0;
+	padding: 0;
+	}
+#search_fre fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	}
+#search_fre label {
+	display: block;
+	float: left;
+	text-indent: -9999em;
+	height: 43px;
+	width: 90px;
+	background: transparent url("http://ourontario.ca/static/img/search_label_bg_f.png") no-repeat top left;
+	}
+
+#search_fre input.searchsubmit {
+	display: block;
+	float: left;
+	height: 43px;
+	width: 41px;
+	background: transparent url("http://ourontario.ca/static/img/search_submit_bg.png") no-repeat top left;
+	}
+#search_fre input.search {
+	margin: 8px 0 0 0;
+	display: block;
+	float: left;
+	border: 1px solid #acacac;
+	color: inherit;
+	font-size: inherit;
+	vertical-align: middle;
+	height: 25px;
+	width: 432px;
+	}
+#search_fre a.advanced {
+	text-indent: -9999em;
+	display: block;
+	float: right;
+	height: 43px;
+	width: 134px;
+	background: transparent url("http://ourontario.ca/static/img/search_advanced_bg_f.png") no-repeat top left;
+	}
+#search_fre a.advanced:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+	opacity: 0.6;				
+	} 					
+
+.contributor a.browse-contributor_fre {
+	background: transparent url("http://ourontario.ca/static/img/browse_sub_contributor_bg_f.png") no-repeat top left;
+	text-indent: -9999em;
+	font-size: 3em;
+	width: 160px;
+	max-height: 43px;
+	margin-bottom: 20px;	
+	overflow: hidden;
+	float: left;
+	}
+.contributor a.browse-contributor_fre:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+	opacity: 0.8;
+	}
+	
+
+/* TOP SEARCH SECTION  (ENG) (for results page)
+************************************************** */
+#searchheader_eng {
+	height: 74px;
+	width: 891px;
+	}
+#searchheader_eng * {
+	text-indent: -9999em;
+	padding: 0;
+	margin: 0;
+	}
+#searchheader_eng h3 {
+	float: left;
+	width: 180px;
+	height: 74px;
+	}
+#searchheader_eng h4 {
+	float: right;
+	width: 136px;
+	}
+#searchheader_eng h3 a, #searchheader_eng h4 a {
+	display: block;
+	height: 74px;
+	}
+#searchheader_eng {
+	background: transparent url("http://ourontario.ca/static/img/search_results_bg_eng.jpg") no-repeat top left;
+	}
+
+/* TOP SEARCH SECTION  (FRE) (for results page)
+************************************************** */
+#searchheader_fre {
+	height: 74px;
+	width: 891px;
+	}
+#searchheader_fre * {
+	text-indent: -9999em;
+	padding: 0;
+	margin: 0;
+	}
+#searchheader_fre h3 {
+	float: left;
+	width: 180px;
+	height: 74px;
+	}
+#searchheader_fre h4 {
+	float: right;
+	width: 136px;
+	}
+#searchheader_fre h3 a, #searchheader_fre h4 a {
+	display: block;
+	height: 74px;
+	}
+#searchheader_fre {
+	background: transparent url("http://ourontario.ca/static/img/search_results_bg_fre.jpg") no-repeat top left;
+	}
+			
+
+/* CONTAINERS (formerly from SCREEN.css & Boiler.css)
+************************************************** */
+div.content {
+	width: 897px;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+	padding-bottom: 10px;
+	text-align: left;
+	}
+
+div.left {
+	float: left;
+	width: 286px;
+	/*width: 580px;*/
+	}			
+div.right {
+	float: right;
+	/*width: 286px;*/
+	width: 580px;
+	}
+div.left50 {
+	float: left;
+	width: 440px;	
+	}
+div.right50 {
+	float: right;
+	width: 440px;
+	}	
+div.left40 {
+	float: left;
+	width: 400px;	
+	}
+div.right40 {
+	float: right;
+	width: 400px;
+	}					
+div.left600{
+	float: left;
+	width: 600px;	
+	}			
+div.thirds {
+	float: left;
+	/*width: 299px;*/
+	margin-right: 13px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	}
+div.thirdright {
+	float: right;
+	margin-right: 13px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 30%;
+	}  
+	
+	
+div.left67 {
+	float: left;
+	width: 60%;
+	}
+div.centered {
+	text-align: center;
+	}
+	
+div.thirdleft {
+	float: left;
+	margin-right: 13px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 30%;
+	text-align: right;
+	}   
+   	
+div.\32thirdsright {
+	float: right;
+	width: 60%;
+	text-align: left;
+	}
+					
+div.serrated {
+	background: transparent url("http://ourontario.ca/static/img/serrated_bg.png") repeat-x;
+	padding-bottom: 3px;
+	padding-top: 3px;
+	}
+
+div.content1 {
+	clear: both;
+	height: 0em;
+	border: 0;
+	/*background-color: #fffbe0;*/
+	background: transparent url("http://ourontario.ca/static/img/content1bg.gif") repeat-y center;
+	width: 897px;
+	margin: 0 auto;
+	padding-bottom: 10px;
+	text-align: left;
+	}
+div.content2 {
+	clear: both;
+	/*background-color: #e7ffdd;*/
+	background: transparent url("http://ourontario.ca/static/img/content2bg.gif") repeat-y center;
+	width: 897px;
+	margin: 0 auto;
+	padding-bottom: 10px;
+	text-align: left;
+	}
+div.content3 {
+	clear: both;
+	/*background-color: #f1eeff;*/
+	background: transparent url("http://ourontario.ca/static/img/content3bg.gif") repeat-y center;				
+	width: 897px;
+	margin: 0 auto;
+	padding-bottom: 10px;
+	text-align: left;
+	}	
+			
+
+div.features {
+	background: transparent url("http://ourontario.ca/static/img/compass_features.gif") no-repeat}
+
+div.content copyright {
+	color: #888;
+	padding-top: 20px;
+	font-size: .8em;
+	text-align: center;
+	clear: both;
+	}
+div.copyright {
+	color: #888;
+	padding-top: 20px;
+	font-size: .8em;
+	text-align: center;
+	clear: both;
+	}
+
+div.social {
+	padding-right: 1px;
+}
+.social-hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	opacity: 1.0;				
+}
+.social-hover:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+	opacity: 0.4;				
+}
+			
+/* DIV CONTAINER Headings
+************************************************** */	
+
+div.content h1 {
+	color: #fb8111;
+	font: 2.0em/120% Georgia,serif;
+	letter-spacing:-0.04em;
+	margin:0;
+	padding:0.2em 0;	
+	}
+
+div.content h2 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.50em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;	
+	}	
+
+div.centered h1 {
+	color: #fb8111;
+	font: 2.0em/120% Georgia,serif;
+	letter-spacing:-0.04em;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.centered h2 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.50em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;	
+	}	
+		
+div.left50 h1 {
+	color: #fb8111;
+	font-family:Georgia,serif;
+	font-size:2.5em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.right50 h1 {
+	color: #fb8111;
+	font-family:Georgia,serif;
+	font-size:2.5em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.left50 h2 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.35em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.right50 h2 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.35em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+
+
+div.left40 h1 {
+	color: #fb8111;
+	font-family:Georgia,serif;
+	font-size:2.5em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.right40 h1 {
+	color: #fb8111;
+	font-family:Georgia,serif;
+	font-size:2.5em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.left40 h2 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.50em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.right40 h2 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.50em;
+	letter-spacing:-0.04em;
+	line-height:120%;
+	margin:0;
+	padding:0.2em 0;
+	}
+div.left40 h3 {
+	color: #fb8111;
+	font: 2.0em/120% Georgia,serif;
+	letter-spacing:-0.04em;
+	margin:0;
+	padding:0.2em 0;	
+	}
+
+/* 
+************************************************** */	
+			
+.contentSubTitle{
+	font-size:110%;
+	font-weight:bold;
+	color: #1168A6;
+	margin:10px;
+}
+.contentTitle{
+	font-size:150%;
+	font-weight:bold;
+	color: #1168A6;
+	margin:10px;
+	text-align: center;
+}
+
+/* layout for search page panels (was formerly div.left & right, and thirds) 
+************************************************** */
+
+div.browsePanel{
+	float: right;
+	width: 160px;
+	padding-top: 30px;
+}
+
+
+div.contentPanel{
+	float: left;
+	width: 700px;
+	padding-right: 30px;
+}
+
+div.featurette featurette-home{
+	float: left;
+	width: 299px;
+	margin-right: 13px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+}
+
+				
+/* RESULT (former RESULTS.CSS)
+************************************************** */
+
+.webtools {
+	padding-bottom: 5px;
+	border-bottom: 1px solid #d5d5d5;
+	padding-top: 5px;
+}
+
+
+div.result {
+	padding: 5px 0 5px 125px;
+	margin: 0 0 5px;
+	border-bottom: 1px solid #ccc;
+	}
+
+div.result clearfix {
+	min-width: 0;
+	clear: both;
+	display: block;
+	float: none;
+	}
+
+div.result h4 {
+	padding: 0;
+	margin-top: 0;
+	vertical-align: top;
+}
+						
+img.result {
+	float: left;
+	margin-left: -125px;
+	max-width: 110px;
+	max-height: 110px;
+	/*height: auto;*/
+	}
+	
+div.snippet{
+	padding: 1px 48px 0;
+	font-size: small;
+}
+
+.img-icon {
+	display: inline;
+}
+
+div.res-p {
+	padding-top: 0;
+	padding-bottom: 0;
+	text-indent: 1px;
+}
+
+/* CLOUD
+************************************************** */
+ul.cloud {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	}
+ul.cloud li {
+	display: inline;
+	padding: .3em .5em;
+	line-height: 200%;
+	font-size: .8em;
+	color: #ccc;
+	/* pulled because it failed in IE 6
+	i.e. the whole UL nowrapped
+	white-space: nowrap;*/
+	}
+ul.cloud li a {
+	/*font-size: 1.6em;*/
+	color: #3861a9;
+	}
+ul.cloud li a small {
+	font-size: .8em;
+	color: #7390c2;
+	}
+ul.cloud li a big {
+	font-size: 1.3em;
+	color: #144599;
+	}
+
+/* OPTIONS
+************************************************** */
+ul.options {
+	margin: -.3em 0;
+	padding: 0 0 0 1em;
+	list-style: none;
+	font-size: .8em;
+	line-height: 130%;
+	}
+ul.options li {
+	padding: 0 0 .6em 0;
+	margin: 0;
+	}
+ul.options li a {
+	font-size: 1.4em;
+	}
+		
+			
+/* OPTION-TYPE
+************************************************** */
+li.option-type-audio {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_audio.jpg") no-repeat 0% 50%;
+	}
+li.option-type-video {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_video.jpg") no-repeat 0% 50%;
+	}
+li.option-type-text {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_text.jpg") no-repeat 0% 50%;
+}
+li.option-type-object {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_object.jpg") no-repeat 0% 50%;
+	}
+li.option-type-images {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_images.jpg") no-repeat 0% 50%;
+	}
+li.option-type-collection {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_collection.jpg") no-repeat 0% 50%;
+	}			
+li.option-type-website {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_website.jpg") no-repeat 0% 50%;
+	}	
+li.option-type-genealogy {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_genealogy.jpg") no-repeat 0% 50%;
+	}	
+li.option-type-newspaper {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_newspaper.jpg") no-repeat 0% 50%;
+	}								
+li.option-type-publication {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_publication.jpg") no-repeat 0% 50%;
+	}	
+li.option-type-group {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_group.gif") no-repeat 0% 50%;
+	}			
+li.option-type-exhibit {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_exhibit.jpg") no-repeat 0% 50%;
+	}	
+li.option-type-place {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_place.jpg") no-repeat 0% 50%;
+	}	
+li.option-type-ship {
+	padding-left: 22px !important;
+	background: transparent url("http://ourontario.ca/static/img/icon_ship.jpg") no-repeat 0% 50%;
+	}
+				
+			
+
+/* MULTIPARTS 
+************************************************** */
+									
+.docPartsLabel {
+	font-size: .9em;
+	font-weight: bold;
+	font-style: italic;
+	margin-top: 4px;
+	padding-top: 2px;
+}
+.docParts {
+	font-size: .9em;
+}
+.docPart {
+	display: inline;
+	padding-left: 8px;
+}
+.docPart a:hover {
+	background:#D6D5D0;
+	font-weight: bold;
+}
+
+.pagePartsLabel {
+	font-size: .9em;
+	font-weight: bold;
+	font-style: italic;
+	display: inline;
+	margin-top: 4px;
+}
+.pageParts {
+	font-size: .9em;
+}
+.pagePart {
+	display: inline;
+	padding-left: 8px;
+}
+.pagePart a:hover {
+	background:#D6D5D0;
+	font-weight: bold;
+}
+
+.pageSearchResults {
+	font-size: .8em;
+	display: inline;
+	padding-left: 8px;
+}
+.pageSearchResults a:hover {
+	background:#D6D5D0;
+	font-weight: bold;
+}
+.docPartAll {
+	display: inline;
+	padding-left: 25px;
+	font: .75em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+.docPartAll a:hover {
+	background:#D6D5D0;
+	font-weight: bold;
+}
+
+div.partsDocHeader {
+	margin-bottom: 60px;
+}
+
+div.partsDocHeader img {
+	float: left;
+}
+
+div.partsDocHeader p {	
+}
+
+.partsTitle {
+	font-weight: bold;
+	font-size: 1.6em;
+	text-align: left;
+}
+
+div.partsDocHeader div.partsSearchForm {
+	float: right;
+	background: transparent url("http://ourontario.ca/static/img/tablebg3.png") repeat-y left;
+	padding: 4px;
+	border: .1em solid #dbdddd;
+	text-align: center;
+	margin-right: 100px;
+}
+
+.partsSearchFormLabel {
+	font-variant: small-caps;
+}
+
+div.partsSearchFormSubmit {
+	
+}	
+
+div.partsListBlock {			
+	display: block;
+	width: 95%;
+	clear: both;
+}
+			
+div.partsLabel {
+	text-align: left;
+	margin-left: 15px;
+	margin-top: 10px;
+	border-top: 1px solid #c7c7c7;
+	width: 85%;
+	font-size: 1.25em;
+	font-weight: bold;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	display: block;
+}   
+
+div.partsLabelSee {
+	font-size: .85em;
+	display: inline;
+	padding-left: 20px;
+}   
+
+			   	
+div.partsSnippet {
+	text-align: left;
+	margin-left: 30px;
+	width: 80%;
+	font-size: .95em;
+	padding-bottom: 3px;
+}
+
+div.partsSnippet  ul {
+	text-align: left;
+	list-style: none;
+}
+
+div.partsSnippet  li {
+	text-align: left;
+	list-style: none;
+}
+						
+div.partsList {
+	display: inline;
+	clear: both;
+	}
+
+
+/* PAGINATION
+************************************************** */
+div.pagination {
+	padding: 10px 0 20px 0;
+	display: inline-block;
+	}
+div.pagination a {
+	padding: .3em .5em;
+	border: 1px solid #ddd;
+	}
+div.pagination a:hover {
+	border: 1px solid #bbb;
+	text-decoration: none;
+	}
+div.pagination span {
+	font-size: .9em;
+	color: #888;
+	display: inline-block;
+	}
+div.pagination span.big {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #990000;
+	padding: .3em .5em;
+	border: 1px solid #bbb;
+	}
+
+
+/* NAVIGATION (Formerly from SCREEN.CSS)
+************************************************** */
+ul.navigation {
+	font-size: 1.1em;
+	line-height: 120%;
+	list-style-type: none;
+	text-transform: uppercase;
+	width: 897px;
+	margin: 0 auto;
+	padding: 10px 0;
+	text-align: left;
+	}
+ul.navigation li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	padding: .5em 1em .5em 0;
+	}
+
+div.clearnav {
+	clear: both;
+	height: 0em;
+	border: 0;
+	}
+
+/* FACET PANEL
+************************************************** */
+#facetPanels{
+	float: right;
+	/*width: 160px;*/
+	width: 286px;
+	/*padding-top: 30px;*/
+}
+
+/* EASYFORM (Formerly from SCREEN.CSS)
+************************************************** */
+form.easyform {
+	margin: .5em 0 1em 0;
+	padding: 0;
+	border: 0;
+	width: 100%;
+	}
+form.easyform fieldset {
+	margin: .5em 0 1em 0;
+	padding: 1em 1em 1.4em;
+	border: 1px solid #ccc;
+	border-radius:4px;
+	background: #eee url("http://ourontario.ca/static/img/easyform_bg.png") repeat-x top;
+	box-shadow: 0px 2px 1px #eaeaea;
+	}
+form.easyform fieldset.externalResults {
+	margin: .5em 0 1em 0;
+	padding: 1em;
+	border: 1px solid #ccc;
+	/* custom */ background: #a8cfe7 url("http://ourontario.ca/static/img/easyform_bg3.png") repeat-x top;
+	}
+form.easyform fieldset.externalResults img {
+padding: 0 1px;
+	}
+form.easyform legend {
+	text-transform: uppercase;
+	font-weight: bold;
+	background-color: #ffffff;
+	}
+
+form.easyform br {
+	clear: both;
+	}
+form.easyform label {
+	display: block;
+	float: left;
+	text-align: right;
+	width: 20%;
+	padding: .5em 1em 0 0;
+	clear: left;
+	font-size: .85em;
+	text-transform: uppercase;
+	color: #999;
+	}
+	
+form.easyform fieldset label {
+	display: none;
+}
+
+fieldset#itype #itype-numeric, fieldset#grn #grn-numeric, fieldset#lc #lc-numeric, fieldset#site #site-numeric {
+	display: block;
+	height: 15px;
+	width: 111px;	
+	padding: 0;
+	border: 0;
+	text-indent: -9999em;
+	overflow: hidden;
+	background: transparent url("http://ourontario.ca/static/img/HS-1_9.png") no-repeat center center;
+	margin-bottom: 5px;
+}
+
+fieldset#itype #itype-alpha, fieldset#grn #grn-alpha, fieldset#lc #lc-alpha, fieldset#site #site-alpha {
+	display: block;
+	height: 15px;
+	width: 111px;	
+	padding: 0;
+	border: 0;
+	text-indent: -9999em;
+	overflow: hidden;
+	background: transparent url("http://ourontario.ca/static/img/HS-A_Z.png") no-repeat center center;
+	margin-bottom: 5px;	
+}
+
+fieldset#itype #itype-less, fieldset#grn #grn-less, fieldset#lc #lc-less, fieldset#site #site-less {
+	display: block;
+	height: 20px;
+	width: 50px;	
+	padding: 0;
+	border: 0;
+	text-indent: -9999em;
+	overflow: hidden;
+	background: transparent url("http://ourontario.ca/static/img/HS-less.png") no-repeat center center;
+	margin-bottom: 5px;	
+}
+
+fieldset#itype #itype-more, fieldset#grn #grn-more, fieldset#lc #lc-more, fieldset#site #site-more {
+	display: block;
+	height: 20px;
+	width: 50px;	
+	padding: 0;
+	border: 0;
+	text-indent: -9999em;
+	overflow: hidden;
+	background: transparent url("http://ourontario.ca/static/img/HS-more.png") no-repeat center center;
+	margin-bottom: 5px;	
+}
+
+form.easyform textarea {
+	width: 60%;
+	border: 1px solid #aaa;
+	padding: .3em;
+	color: #555;
+	}
+
+
+form.easyform textarea.message {
+	width: 90%;
+	border: 1px solid #aaa;
+	padding: .3em;
+	color: #555;
+	}
+form.easyform textarea.q {
+	width: 60%;
+	border: 1px solid #aaa;
+	padding: .3em;
+	color: #555;
+	}
+
+/* Facet Panel Content - Years and Decades
+*********************************** */
+
+.decade {
+	font-size: .8em;
+	text-decoration: none;
+	padding: 1px;	
+	text-align: center;
+	margin: 0;
+	color: #686868;
+	background: #D6D5D0;
+	border-right: 1px solid #D6D5D0;
+	border-bottom: 1px solid #D6D5D0;
+}
+
+.decade a {
+	font-size: .8em;
+	text-decoration: none;	
+	padding: 2px;
+	text-align: center;
+	margin: 0;
+	font-weight: bold;
+	color: #15148f;
+	background: #CCCCCC;
+	border-right: 1px solid #686868;
+	border-bottom: 1px solid #686868;
+}
+
+.decade a:hover {
+	background: #9FA7BC;	
+}
+
+.year {
+	font-size: .75em;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: none;
+	color: #9FA7BC;
+    padding: 2px 2px 2px 1px;
+    margin: 0 auto; 
+}
+.year a {
+	color: #15148f;
+	font-size: .8em;
+	font-weight: bold;
+	display: block; 
+    padding: 2px 2px 2px 1px; 
+	margin: 0 auto; 
+	text-decoration: none; 
+    border-top-style: none;
+	border-right: 1px solid #9FA7BC;
+	border-bottom: 1px solid #9FA7BC;
+}
+
+.year a:hover {
+    border-top-style: none;
+	border-right: 1px solid #081255;
+	border-bottom: 1px solid #081255;
+	background: #9FA7BC;	
+}
+
+
+/* TABLE (used on Help/Aider pages)
+************************************************** */
+.TableCenter {
+	padding: 2px;
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 8px;
+}			
+.TableHeader {
+	background: #FBFBFB url(http://ourontario.ca/static/img/tablebg2.png) repeat-y right;
+	font-size:100%;
+	font-weight:bold;
+	color: #1168A6;
+	padding: 2px 3px;
+	margin-right: 4px;
+	margin-top: 10px;
+}
+.TableHeader2 {
+	background: #FBFBFB url(http://ourontario.ca/static/img/tablebg3.png) repeat-y left;
+	font-size:100%;
+	font-weight:bold;
+	color: #1168A6;
+	padding: 2px 3px;
+	margin-right: 4px;
+	margin-top: 10px;
+}
+.TableLabel {
+	background: #FBFBFB url(http://ourontario.ca/static/img/tablebg2.png) repeat-y right;
+	font-weight: bold;
+	width: 200px;
+	text-align: right;
+	vertical-align: top;
+	padding-right: 6px;
+	margin-left: 2px;
+	border-right: .1em solid #032e1a;
+	color: #032e1a;
+	font-size: 1.1em;
+	border-bottom: .1em dotted #add4e4;
+}
+.TableData {
+	text-align: left;
+	padding-bottom: 3px;
+	padding-right: 5px;
+	padding-left: 4px;
+}
+
+
+/* ADDITIONAL BITS
+************************************************** */
+ hr {
+	height: .1em;
+	clear: both;
+	color: #ffffff;
+	visibility: hidden;
+}
+td.SearchPanel {
+	padding: 0 0 10px 15px;
+	border-bottom: 1px solid #0f3f7f;
+}
+
+div.copyright {
+	color: #888888;
+	padding-top: 10px;
+	font-size: 0.8em;
+	text-align: center;
+}
+.unbulletedList ul{
+	list-style: none;
+}
+.geo{
+	visibility:hidden;
+}	
+.subhead {
+	padding-top: 5px;
+	font-weight: bold;
+	font-size: 1.20em;
+	color: #127f7f;
+	list-style-position: inside;
+}
+
+ul {
+	list-style-position: inside;
+	list-style-image: none;
+	list-style-type: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+.invite {
+	padding: 4px;
+	background-color: #e6e6e6;
+	color: #5f213b;
+	font-size: 1.5em;
+	text-align: left;
+	border-bottom: 2px groove #800040;
+	border-top: 2px groove #800040;
+}
+.stats {
+	background-color: #d9fef1;
+	color: #8d0000;
+	font-size: 1.15em;
+	text-align: left;
+	border-bottom: 2px groove #800040;
+	border-top: 2px groove #800040;
+	padding: 4px 4px 10px;
+}
+
+.contact {
+	background-color: #fbfbfb;
+	padding: 18px 18px 20px;
+	margin-left: 2px;
+	border-right: .1em solid #032e1a;
+	border-left: .1em solid #024929;
+	color: #032e1a;
+}
+
+.extendedFooter {
+	margin-bottom: 800px;
+}
+
+				
+/* FEATURETTE-WIDE			
+************************************************** */
+.featurette-wide {
+	width: 897px;
+	background: #eaeaeb url("http://ourontario.ca/static/img/featurette-wide_fill_bg.gif") repeat-y;
+	/* color: #e5e5e5; */
+	font-size: .9em;
+	margin: 0;
+	height: 100%;
+}
+.featurette-wide p {
+	padding: 10px 15px 0 15px;
+}
+.featurette-wide h4 {
+	width: 897px;
+	height: 20px;
+	padding: 0;
+	margin: 0;
+	margin-top: 20px;
+	text-indent: -9999em;
+	background: transparent url("http://ourontario.ca/static/img/featurette-wide_top_bg.gif") no-repeat center;
+}
+.featurette-wide p.bottom {
+	text-align: right;
+	padding-bottom: 10px;
+	background: transparent url("http://ourontario.ca/static/img/featurette-wide_bottom_bg.gif") no-repeat bottom;
+}
+				
+.left50newstemplate {
+	float: right;
+	width: 440px;
+}
+
+
+.right50newstemplate {
+	float: right;
+	width: 440px;
+}
+
+span.big {
+	font-size: 1.15em;
+	display: inline;
+}
+
+/* FEATURETTE3-used for 2 spotlight stories on SEARCH/RECHERCHE
+************************************************************* */
+.featurette3 {
+	width: 550px;
+	background: transparent  url("http://graphics.ourontario.ca/featurette3_bg.png") repeat-y;
+	margin: 0;
+	height: 100%;
+	padding-top: 7px;
+	padding-left: 20px;
+	}
+.featurette3 p.top {
+	padding: 10px 15px 0;
+	}
+.featurette3 p.topMore {
+	padding: 5px 15px 10px;
+	border-bottom: 2px dashed #fff;
+	text-align: right;
+	}
+.featurette3 p.bottom {
+	padding: 10px 15px 0;
+	text-align: right;
+}
+.featurette3 p.bottomMore {
+	padding: 5px 15px 15px;
+	text-align: right;
+	}
+
+
+
+
+/*** for features page ***/
+
+.half{
+  float:left;
+  padding:15px 0;
+}
+.icon_holder{
+  width:100px;
+  height:95px;
+  float:left;
+  /*background:transparent url(/static/images/product/product_featured_icons.png) no-repeat;*/
+  background:transparent;
+}
+
+/*.search{
+  background-position:0 0;
+}*/
+.share{
+  background-position:-400px 0;
+}
+.discover{
+  background-position:-104px 0;
+}
+.jump{
+  background-position:-500px 0;
+}
+
+/*.slideshow{
+  background-position:-200px 0;
+}*/
+.shopping{
+  background-position:-300px 0;
+}
+
+/* MINISEARCH ENG
+*************************************************** */
+form.minisearch_eng {
+	overflow: hidden;
+	width: 286px;
+	border: 0;
+	margin: 0;
+	padding: 0 0 10px 0;
+	color: #e5e5e5;
+	font-size: .9em;
+	background: purple;
+	}
+form.minisearch_eng fieldset {
+	padding: 10px 17px 0 17px;
+	border: 0;
+	margin: 0;
+	}
+form.minisearch_eng h4 {
+	display: block;
+	background: black;
+	height: 73px;
+	width: 286px;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	text-indent: -9999em;
+	}
+form.minisearch_eng p {
+	clear: both;
+	/* text-transform: uppercase; */
+	}
+form.minisearch_eng a {
+	color: #e1ebf5;
+	text-decoration: underline;
+	}
+form.minisearch_eng input.minisubmit {
+	display: block;
+	float: left;
+	border: 0;
+	margin: 0 0 0 -1px;
+	padding: 0;
+	height: 30px;
+	width: 29px;
+	}
+form.minisearch_eng input.minisearch {
+	display: block;
+	float: left;
+	color: #444;
+	height: 30px;
+	width: 218px;
+	margin: 0;
+	border: 0;
+	padding-left: 10px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 208px;
+	}
+form.minisearch-government_eng {
+	background: transparent url("http://ourontario.ca/static/img/minisearch_government_bg.jpg") no-repeat bottom left;}
+form.minisearch-government_eng fieldset {
+	background: transparent url("http://ourontario.ca/static/img/minisearch_government_fieldset_bg.jpg") repeat-y left;}
+form.minisearch-government_eng h4 {
+	background: transparent url("http://knowledge.library.utoronto.ca/apache/graphics/minisearch_legend_govdocs.jpg") no-repeat top left;}
+form.minisearch-government_eng input.minisearch {
+	background: transparent url("http://ourontario.ca/static/img/minisearch_government_text_bg.jpg") no-repeat top left;}
+
+/* MINISEARCH - Fench
+************************************************** */
+form.minisearch_fre {
+	overflow: hidden;
+	width: 286px;
+	border: 0;
+	margin: 0;
+	padding: 0 0 10px 0;
+	color: #e5e5e5;
+	font-size: .9em;
+	background: purple;
+	}
+form.minisearch_fre fieldset {
+	padding: 10px 17px 0 17px;
+	border: 0;
+	margin: 0;
+	}
+form.minisearch_fre h4 {
+	display: block;
+	background: black;
+	height: 73px;
+	width: 286px;
+	margin: 0;
+	border: 0;
+	padding: 0;
+	text-indent: -9999em;
+	}
+form.minisearch_fre p {
+	clear: both;
+	/* text-transform: uppercase; */
+	}
+form.minisearch_fre a {
+	color: #e1ebf5;
+	text-decoration: underline;
+	}
+form.minisearch_fre input.minisubmit {
+	display: block;
+	float: left;
+	border: 0;
+	margin: 0 0 0 -1px;
+	padding: 0;
+	height: 30px;
+	width: 29px;
+	}
+form.minisearch_fre input.minisearch {
+	display: block;
+	float: left;
+	color: #444;
+	height: 30px;
+	width: 218px;
+	margin: 0;
+	border: 0;
+	padding-left: 10px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 208px;
+	}
+form.minisearch-government_fre {
+	background: transparent url("http://ourontario.ca/static/img/minisearch_government_bg.jpg") no-repeat bottom left;}
+form.minisearch-government_fre fieldset {
+	background: transparent url("http://ourontario.ca/static/img/minisearch_government_fieldset_bg.jpg") repeat-y left;}
+form.minisearch-government_fre h4 {
+	background: transparent url("http://knowledge.library.utoronto.ca/apache/graphics/minisearch_legend_govdocs_f.jpg") no-repeat top left;}
+form.minisearch-government_fre input.minisearch {
+	background: transparent url("http://ourontario.ca/static/img/minisearch_government_text_bg.jpg") no-repeat top left;}
+	
+	
+/* Footers (two of them)
+************************************************** */
+/* Agency/site Footer*/
+
+.content.copyright.clearfix  {
+	clear: both;
+	display: block;
+}
+
+.content.copyright.clearfix img {
+	padding: 0;
+	top: 20px;
+}
+.content.copyright.clearfix p {
+	text-align: center;
+	vertical-align: top;
+}
+
+
+/* ODW all-sites Footer*/
+.odwFooterRight p{
+	float: right;
+	text-align: right;
+	vertical-align: baseline;
+	padding-top: 5px;
+	padding-bottom: 25px;
+}
+
+
+/* OVERRIDE THE LEFT/RIGHT FLOATS (from RESULTS CSS)
+************************************************** */
+div.left {
+	float: right !important;
+	}
+
+
+div.right {
+	float: left !important;
+	}
