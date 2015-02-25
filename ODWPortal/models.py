@@ -33,7 +33,7 @@ class SiteSetup(models.Model):
         return truncatewords(self.avalue, 30)
 
 
-class site_alternate_searches(models.Model):
+class SiteAlternateSearches(models.Model):
     id = models.AutoField(primary_key=True)
     site = models.ForeignKey(Site, null=False)
     alt_site_id = models.IntegerField(null=True, blank=True)

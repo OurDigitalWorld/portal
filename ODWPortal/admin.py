@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from ODWPortal.models import Site, SiteSetup, Language, site_alternate_searches
+from ODWPortal.models import Site, SiteSetup, Language, SiteAlternateSearches
 # Register your models here.
 
 
@@ -19,4 +19,4 @@ admin.site.register(Language, LanguageAdmin)
 
 class SiteAlternateSearchesAdmin(admin.ModelAdmin):
     list_display = ['site', 'alt_site_id', 'alt_site_label']
-admin.site.register(site_alternate_searches, SiteAlternateSearchesAdmin)
+admin.site.register(SiteAlternateSearches, SiteAlternateSearchesAdmin)

@@ -4,7 +4,7 @@ import urllib
 import re
 import json
 import xmltodict
-from ODWPortal.models import site_alternate_searches, SiteSetup
+from ODWPortal.models import SiteAlternateSearches, SiteSetup
 from ODWPortal.querySolr import solr_query, get_search_set
 from ODWPortal.utilities import get_doc_block
 from Portal.settings import SOLR_URL
@@ -12,7 +12,7 @@ from Portal.settings import SOLR_URL
 
 def alt_search(site_id, request_q, action):
     return_list = []
-    alt_site_search_set = site_alternate_searches.objects.filter(site=site_id).order_by('site_order')
+    alt_site_search_set = SiteAlternateSearches.objects.filter(site=site_id).order_by('site_order')
     alt_query_string, alt_query_dict = solr_query(request_q, 'extAltSearch', "")
     for alt_site in alt_site_search_set:
         alt_preferred_results_url = ''
