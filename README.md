@@ -1,4 +1,4 @@
 portal
 ======
 
-Tool design to use django to search across datasets and provide faceted results
+Tool designed to use django to search across solr data sets and provide faceted results
