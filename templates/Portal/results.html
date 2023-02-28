@@ -1,5 +1,5 @@
 {% extends "base_content_narrow.html" %}
-{% load staticfiles %}
+{% load static %}
 {% block head %}
 	{% include "Portal/snippets/head.html" with pageName=site_language.NBLabelResults jquery="true" javascript_page="Results"%}
 {% endblock head%}
@@ -12,112 +12,50 @@
                     <h1>{{ site_language.NBLabelResults }} </h1>
             </div>
             <div class="searchLogic">
-               {{ site_language.ResLabelFoundBefore }} <b class="count">{{ numFound }}</b>   {{ site_language.ResLabelFoundAfter }}.<br>
-                {% if numFound > OriginalNumFound %}
-                   {{ site_language.ResFacetNullSearchSubstitution1}}"{{ OriginalQ }}."  {{ site_language.ResFacetNullSearchSubstitution2}} "{{ altCollation }}."<br/>
-                {% endif %}
-                {{ searchLogicString|safe }}
+               {{ site_language.ResLabelFoundBefore }} <b class="count">{{ num_found }}</b>   {{ site_language.ResLabelFoundAfter }}.<br>
+                
+                <form method="get" action="results" name="Search" class="easyform">
+                    <div class="ResSearch search-bar" >
+                        <label for="searchfacetq">{{ query_logic|safe }}</label>
+                        <input type="text" id="searchfacetq" name="q" class="q" size="30" value="{{ original_q }}"/>
+                        <input value="{{ site_language.ResFacetSearchLabelSubmit }}" name="submit" type="submit">
+                        {{ facet_q|safe }}
+                    </div>
+                </form>
+                {{ search_logic_string|safe }}
             </div>
 
-    {% if numFound > 0 %}
-     {% if resultType == 'single' %}
+    {% if num_found > 0 %}
 
          <img id="listview" src="{% static "img/view_list.gif"%}" alt="list"  title="list"/>
          <img id="thumbListview" src="{% static "img/view_thumblist.gif"%}" alt="thumb list" title="thumb list" />
          <img id="2colview" src="{% static "img/view_2col.gif"%}" alt="2 columns" title="2 columns"/>
          <img id="galleryview" src="{% static "img/view_gallery.gif"%}" alt="gallery" title="gallery"/>
             <div class="pagination">
-                {{ pageNavBar|safe }}
+                {{ page_nav_bar|safe }}
             </div>
-    {% else %}
-            <div class="pagination">
-         <a href="{{ alt_url }}">{{ site_language.ResLabelFullSet }} ({{ numFound }})</a>
-         </div>
-    {% endif %}
         <div class="content">
             <div id="resultList" class="{{ site_values.results_list_style }}">
                 {{ document_panel|safe }}
             </div>
          </div>
-            {% if resultType == 'single' %}
-                <div class="pagination">
-                    {{ pageNavBar|safe }}
-                </div>
-            {% endif %}
+        <div class="pagination">
+            {{ page_nav_bar|safe }}
         </div>
-        <div class="left ">
-            <form method="get" action="results" name="Search" class="easyform">
-                <fieldset class="externalResults">
-                    <legend >{{ site_language.results_label_web_tools }}</legend>
-					<div class="webtools">
-					<b>{{ site_language.results_label_alternate_formats}}</b>:<br/>
-					<a href="/dc?{{ searchQ }}">Dublin Core</a> |
-					<a href="/rss?{{ searchQ }}">RSS</a> |
-					<a href="/atom?{{ searchQ }}">Atom</a> |
-					<a href="/solr?{{ searchQ }}">Solr</a> |
-					<a href="/mods?{{ searchQ }}">Mods</a> |
-					<a href="/rdf?{{ searchQ }}">RDF</a> 
-					</div>
-                    {% if KMLCount > 0 %}
-					<div class="webtools">
-                        <a href="OO-{% now "Y-m-d-G-i-s" %}.kml?{{ searchQ }}"><img src="{% static "img/googleearth.gif"%}" alt="Google Earth"> {{ site_language.ResFacetSearchLabelGoogleEarth}}
-                        </a><a href="kml">[{{ site_language.ResFacetSearchLabelGoogleEarthHelp}}]</a>
-					</div>
-                    {% endif %}
-					<div class="webtools">
-                    {% include "Portal/snippets/socialBookmark.html" %}
-					</div>
-
-                </fieldset>
-                {% if alt_search_results %}
-                <fieldset class="externalResults">
-                    <legend>{{ site_language.ResLabelAltSearch }}</legend>
-                    <ul class="options">
-                    {% for alt_search in alt_search_results %}
-                        <li> <a href="{{ alt_search.url }}" target="_blank">{{ alt_search.label }} ({{ alt_search.count }})</a></li>
-                    {% endfor %}
-                    </ul>
-                    {% if resultType == 'single' %}
-                    <input id="multi_site" type="button" value="{{ site_language.ResLabelButtonMultiSite }}" />
-                    {% else %}
-                    <input id="single_site" type="button" value="{{ site_language.ResLabelButtonSingleSite }}" />
-                    {% endif %}
-                </fieldset>
-                {% endif %}
-                <fieldset>
-                    <legend>{{ site_language.ResFacetSearchLabelTitle }}</legend>
-                    <label for="searchfacetq">{{ site_language.ResFacetSearchLabelTitle }}</label>
-                    <input size="20" id="searchfacetq" name="q" class="q" type="text" />
-                    <input value="{{ site_language.ResFacetSearchLabelSubmit }}" name="submit" type="submit" />
-                    {{ facetQ|safe }}
-                </fieldset>
-                {% if resultType == 'single' %}
-                {{ facetPanels|safe }}
-                {% endif %}
-            </form>
+        <div class="alternateFormats">
+            <b>{{ site_language.results_label_web_tools }}</b>:<br/>
+                <a href="/dc?{{ search_q }}">Dublin Core</a> |
+                <a href="/mods?{{ search_q }}">Mods</a> 
+        </div>
+        </div>
+        <div class="left facetPanel">
+            {{ facet_panels|safe }}
         </div>
     {% else %}
+        <div class="noResults">{{ site_language.ResFacetNullSearchEmpty|safe }}</div>
         </div>
-        <!--  TODO floating into the wrong position -->
-        <div class="noResults">{{ site_language.ResFacetNullSearchEmpty }}</div>
     {% endif %}
 </div>
 
-     {% if resultType == 'multipane' %}
-    <div  id="altContent" class="content clearfix" >
-    {% for alt_search in alt_search_results %}
-        <div class="altResultBox">
-        <div class="altSearchSet">
-        <h3><a href="{{ alt_search.url }}" title="{{ alt_search.label }}">{{ alt_search.label }}</a></h3>
-        </div>
-            <div class="altResultMore">
-            {% if alt_search.more %}
-            <a href="{{ alt_search.url }}" title="{{ alt_search.label }}" target="_blank">{{ site_language.ResLabelFullSet }}({{ alt_search.count }})</a>
-            {% endif %}
-            </div>
-        {{ alt_search.results|safe }}
-        </div>
-    {% endfor %}
-    </div>
-    {% endif %}
+
 {%endblock content%}

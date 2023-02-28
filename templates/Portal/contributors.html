@@ -11,21 +11,29 @@
 				<h1>{{ site_language.DetLabelContributors }}</h1>
 		</div>
 		<div class="clearfix">
+		{% if contribute_display == "checkbox" %}
 			<div class="left50">
-			
 				<div class="unbulletedList">
 					<form method="get" action="results">
                         <fieldset class="undecorated">
 							<legend>{{ site_language.DetLabelContributors }}</legend>
 						<ul>
-							{{ facetList|safe }}
+							{{ facet_list|safe }}
 						</ul>
                             </fieldset>
 						<br />
-						<input value="Search" type="submit"><input value="Clear" type="reset">
+						<input value="{{ site_language.SearchSubmit }}" type="submit">
+						<input value="{{ site_language.SearchReset }}" type="reset">
 					</form>
 				</div>
 			</div>
+		{% elif contribute_display == "plain_list" %}
+			<div class="contributorCloud">
+				<ul>
+				{{ facet_list|safe }}
+				</ul>
+			</div>
+		{% endif %}
 		</div>
 
 	</div>

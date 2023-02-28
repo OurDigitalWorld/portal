@@ -1,7 +1,7 @@
 {% extends "base_content_narrow.html" %}
 
 {% block head %}
-	{% include "Portal/snippets/head.html" with pageName="Media Types"%}
+	{% include "Portal/snippets/head.html" with pageName=site_language.DetLabelMediaType%}
 {% endblock head%}
 
 {%block content %}
@@ -18,12 +18,13 @@
                         <fieldset class="undecorated">
 							<legend>{{ mediaLabel }}</legend>
 						<ul>
-							{{ facetList|safe }}
+							{{ facet_list|safe }}
 						</ul>
                         </fieldset>
 						<br />
                         <input type="hidden" name="mt" value="{{ request.mt }}" />
-						<input value="Search" type="submit"><input value="Clear" type="reset">
+						<input value="{{ site_language.SearchSubmit }}" type="submit">
+						<input value="{{ site_language.SearchReset }}" type="reset">
 					</form>
 				</div>
 			</div>

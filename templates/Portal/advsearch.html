@@ -68,14 +68,14 @@
             <legend>{{ site_language.AdvLabelContributor }}</legend>
             <p><label for="site">{{ site_language.adv_contributor_intro }}:</label></p>
             <select id="site" multiple name="site" size="1">
-                {{ siteList|safe }}
+                {{ site_list|safe }}
             </select>
         </fieldset>
         <fieldset id="location">
             <legend>{{ site_language.AdvLegendLocation }}</legend>
             <p>
-                <label for="sp">{{ site_language.AdvLabelLocation }}:</label>
-                <input id="sp" type="text" name="sp" />
+                <label for="lc">{{ site_language.AdvLabelLocation }}:</label>
+                <input id="lc" type="text" name="lc" />
             </p>
              <p>(<a href="help#location">{{ site_language.AdvLabelLocationHint }}</a>)</p>
         </fieldset>
@@ -85,7 +85,7 @@
                 <p>{{ site_language.AdvLabelMedia }}:</p>
             </div>
             <ul class='unbulletedList'>
-                {{ mediaTypeList|safe }}
+                {{ media_type_list|safe }}
             </ul>
         </fieldset>
         <div class="advsrchformbase">

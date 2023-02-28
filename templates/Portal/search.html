@@ -8,6 +8,7 @@
 	<div class="content clearfix">
 		{% include "Portal/snippets/navigation.html" with pageName="Search"%}
 	    {% include "Portal/snippets/searchPanel.html" %}
-        {{ site_values.search_content_block|safe }}
+	    {% include "Portal/snippets/browseby.html" %}
+        {{ search_content_block_rev|safe }}
 	</div>
 {%endblock content%}
