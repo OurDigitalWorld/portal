@@ -25,7 +25,7 @@ class Site(models.Model):
 
 class SiteSetup(models.Model):
     id = models.AutoField(primary_key=True)
-    site = models.ForeignKey(Site, null=False)
+    site = models.ForeignKey(Site, null=False, on_delete=models.CASCADE)
     afield = models.CharField(max_length=50, null=False)
     avalue = models.TextField(null=True)
 
@@ -35,7 +35,7 @@ class SiteSetup(models.Model):
 
 class SiteAlternateSearches(models.Model):
     id = models.AutoField(primary_key=True)
-    site = models.ForeignKey(Site, null=False)
+    site = models.ForeignKey(Site, null=False, on_delete=models.CASCADE)
     alt_site_id = models.IntegerField(null=True, blank=True)
     site_order = models.FloatField(blank=True, null=True)
     site_relationship = models.IntegerField(null=True, blank=True)

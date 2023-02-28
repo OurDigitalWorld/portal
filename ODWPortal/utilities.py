@@ -1,13 +1,12 @@
-
-import json
 import math
-import urllib
-from lxml import etree
+import re
+from urllib import request, parse
 from datetime import datetime
-from django.utils.http import urlquote
 from django.utils.html import escape
 from django.template.defaultfilters import truncatewords, striptags
-from Portal.settings import SOLR_URL, STATIC_URL
+from Portal.settings import STATIC_URL, SOLR2_URL, SNIPPET_URL_OOI, SNIPPET_URL_MHGL
+from ODWPortal.parts import get_solr
+# from Portal.customlog import log_request
 
 base_results_url = '<a href="results?'
 base_parts_url = ('%svitaParts/select?wt=json'
@@ -17,7 +16,7 @@ base_parts_url = ('%svitaParts/select?wt=json'
                   '&hl.fragsize=75'
                   '&start=0'
                   '&rows=10'
-                  '&q=') % SOLR_URL
+                  '&q=') % SOLR2_URL
 
 
 def page_navigation(num_found, rows, page_number, search_qs, site_language):
@@ -30,10 +29,10 @@ def page_navigation(num_found, rows, page_number, search_qs, site_language):
     if num_found > 0:
         total_pages = int(math.ceil(float(num_found) / float(rows)))
         page_string = '<span>%s %s %s %s</span>&#160;' % (
-                      site_language['ResLabelPageBefore'],
-                      str(page_number), 
-                      site_language['ResLabelPageMiddle'],
-                      str(total_pages)
+            site_language['ResLabelPageBefore'],
+            str(page_number),
+            site_language['ResLabelPageMiddle'],
+            str(total_pages)
         )
         if page_number > 1:
             prev_page = str(page_number - 1)
@@ -74,15 +73,21 @@ def page_navigation(num_found, rows, page_number, search_qs, site_language):
     return page_string
 
 
-def get_doc_block(docs, just_qs, highlighting, block_id, site_language):
+def get_doc_block(docs, just_qs, highlighting, block_id, site_language, site_values):
     """
     prep document block for the results page; insert multipage lookups if required
     """
+    # log_request("just_qs Utility 85", just_qs)
     # docs is a single item list, containing a dictionary with the elements
     if block_id:
         block_id_string = ' id="%s"' % block_id
     else:
         block_id_string = ''
+    if 'SiteGraphicsSet' in site_values:
+        site_graphics_set = site_values['SiteGraphicsSet']
+    else:
+        site_graphics_set = 'A'
+    # TODO should the following class actually be single, or dropped?
     doc_block = '<ul%s class="single">' % block_id_string
     for doc in docs:
         doc_id = doc.get("id", "")
@@ -90,13 +95,16 @@ def get_doc_block(docs, just_qs, highlighting, block_id, site_language):
         if isinstance(url, list):
             url = url[0]
         thumbnail = doc.get("thumbnail", "")
+        if 'THL_mt' in thumbnail:
+            substitute_thumb = '%s_THL_mt' % site_graphics_set
+            thumbnail = thumbnail.replace('THL_mt', substitute_thumb)
         title_list = doc.get("title", "")
         if title_list:
             title = title_list[0]
         else:
             title = ''
         type_list = doc.get("type", "")
-        # now parse type_list into series of icons
+        # now parse typelist into series of icons
         type_block = ''
         for dctype in type_list:
             icon = type_icons(dctype, 'icon')
@@ -130,12 +138,13 @@ def get_doc_block(docs, just_qs, highlighting, block_id, site_language):
         elif 'description' in highlight_dict:
             highlight = highlight_dict['description']
             description_block = '...%s...' % str(highlight[0])
+            # print descBlock
         else:
             # truncated descriptions
             description_list = doc.get("description", "")
             for desc in description_list:
                 description_block = '%s   ' % truncatewords(desc, 50)
-        description_block = description_block.replace('&amp;#160;', ' ')
+        description_block = description_block.replace('&amp;# 160;', ' ')
 
         # lat/long  not currently used but anticipated in Vita migration
         # latitude = doc.get("itemLatitude","")
@@ -148,10 +157,12 @@ def get_doc_block(docs, just_qs, highlighting, block_id, site_language):
             site_block += '<strong>%s</strong><br/>' % site
         site_block += '</div>'
 
+        # log_request("multi_part", doc.get("multiPart"))
         # multipart block
         multi_part = doc.get("multiPart")
         multi_part_block = ''
         if multi_part and just_qs:
+            # log_request("doing a multiPart lookup:", url)
             (multi_part_block,
              scan_description_block) = multi_part_lookup(just_qs,
                                                          doc_id,
@@ -187,21 +198,34 @@ def get_doc_block(docs, just_qs, highlighting, block_id, site_language):
 
 
 def multi_part_lookup(just_qs, docid, record_url, site_language):
+    # print("justqs: ", just_qs)
+    # print(docid)
+    # print('recordurl: %s' % recordurl)
     block = ''
     scan_description_block = ''
-    url = '%s%s+AND+docid:%s&sort=partSort+asc' % (base_parts_url, just_qs, docid)
-    solr_response = get_parts(url, 'json')
+
+    url = '%s(%s)+AND+docid:%s&sort=partSort+asc' % (base_parts_url, just_qs, docid)
+
+    # log_request("parturl:", url)
+    solr_response = get_solr(url, 'json')
+    # log_request("solr_response: ", solr_response)
     if isinstance(solr_response, dict):
         parts_count = solr_response['response']['numFound']
         if parts_count > 0:
             block = '<div class="docParts"><div class="docPartsLabel">%s:</div>' % site_language['ResLabelPage']
+            # print url
             parts = solr_response['response']['docs']
+            # parts = [x['docs'] for x in solr_response['response']]
             first_pass = True
-            scan_description_block = ''
+            # scan_description_block = ''
             for part in parts:
                 part_url = part.get('partURL')
-                label = part.get('label')
+                label_list = part.get('label')
+                label = label_list[0]
+                label = label.replace("['", "")
+                label = label.replace("']", "")
                 part_id = part.get('id')
+                # print("id: ", part_id)
                 doc_id = part.get('docid')
                 if 'text' in solr_response['highlighting'][part_id]:
                     highlight = striptags(solr_response['highlighting'][part_id]['text'][0])
@@ -210,24 +234,38 @@ def multi_part_lookup(just_qs, docid, record_url, site_language):
                 part_sort = part.get('partSort')
                 use_url = ''
                 if '/data' in record_url:
+                    # print 'partURL (data): %s' % partURL
                     index = record_url.index('data')
+                    # print index
                     base_record_url = record_url[:index]
+                    # print(base_record_url)
                     use_url = '%spage/%s?q=%s&amp;docid=%s' % (base_record_url, part_sort, just_qs, doc_id)
                 elif 'http:' in part_url:
+                    # print 'partURL (http): %s' % partURL
                     use_url = '%s&amp;query=%s' % (part_url, just_qs)
                 if first_pass:
                     # if using graphic block from ink get that prepared
-                    if 'ink' in part_url:
-                        hi = part_url.index('-x')
-                        highlight_image = part_url[:hi]
-                        part_image = part_url[hi+2:hi+3]
-                        scan_description_block += ('<div class="highlightImage">'
-                                                   '<a href="%s">'
-                                                   '<img src="%s/hlRouter-%s?'
-                                                   'query=%s&amp;width=500&amp;height=175" width="380"/>'
-                                                   '</a>'
-                                                   '</div>'
-                                                   % (use_url, highlight_image, part_image, just_qs))
+                    # print 'part_url (first pass): %s' % part_url
+                    base_url = ''
+                    if 'ink' in part_url or '/page/' in part_url:
+                        if 'OOI' in part_id:  # has to be directed to one of two databases/services
+                            base_url = SNIPPET_URL_OOI
+                        elif 'MHGL' in part_id:
+                            base_url = SNIPPET_URL_MHGL
+                        if 'AND' in just_qs:  # replace AND with OR for the OCR index search
+                            snippet_qs = just_qs.replace('AND', 'OR')
+                        else:
+                            snippet_qs = just_qs
+                        snippet_url = '%s?id=%s&q=%s' % (base_url, part_id, snippet_qs)
+                        # print('snippet_url: ', snippet_url)
+                        try:
+                            conn = request.urlopen(snippet_url)
+                            scan_description_block = conn.read().decode('utf-8')
+                            conn.close()
+                        except IOError:
+                            scan_description_block = ''
+                            # To Do: fix by passing the preferred url for the site
+                            # to a  snippet2.asp where we can derive the site id from the url
                 first_pass = False
                 block += ('<div class="docPart">'
                           '<a href="%s" title="... %s ...">'
@@ -249,7 +287,7 @@ def multi_part_lookup(just_qs, docid, record_url, site_language):
     return block, scan_description_block
 
 
-def facet_panel(facets, search_qs, site_language):
+def facet_panel(facets, search_qs, site_language, query_dict):
     facet_string = '<div id="facetPanels">'
     dctype = facets['type']
     site = facets['site']
@@ -265,31 +303,36 @@ def facet_panel(facets, search_qs, site_language):
                                            'site',
                                            site_language['ResFacetContributorsLabelTitle'],
                                            search_qs,
-                                           site_language)
+                                           site_language,
+                                           query_dict)
     if dctype:
         facet_string += facet_list_anchors(dctype,
                                            'mt',
                                            site_language['ResFacetMediaTypesLabelTitle'],
                                            search_qs,
-                                           site_language)
+                                           site_language,
+                                           query_dict)
     if fspatial:
         facet_string += facet_list_anchors(fspatial,
                                            'lc',
                                            site_language['ResFacetMapLabelTitle'],
                                            search_qs,
-                                           site_language)
+                                           site_language,
+                                           query_dict)
     if fgroupname:
         facet_string += facet_list_anchors(fgroupname,
                                            'grn',
                                            site_language['ResFacetGroupsLabelTitle'],
                                            search_qs,
-                                           site_language)
+                                           site_language,
+                                           query_dict)
     if item_type:
         facet_string += facet_list_anchors(item_type,
                                            'itype',
                                            site_language['ResFacetItemTypesLabelTitle'],
                                            search_qs,
-                                           site_language)
+                                           site_language,
+                                           query_dict)
 
     if decades:
         facet_string += get_decades(facets, search_qs, site_language)
@@ -305,27 +348,29 @@ def facet_panel(facets, search_qs, site_language):
             facet_string += ('<li>'
                              '%s%s&amp;fc=true">'
                              '<img src="%s" alt="comments" class="img-icon"/> &#160; '
-                             '%s: %s'
+                             '%s (%s)'
                              '</a>'
                              '</li>'
                              % (base_results_url,
                                 search_qs,
                                 type_icons('comment', 'icon'),
                                 site_language['AdvLabelComment'],
-                                str(feature_comment[i+1])))
+                                str(feature_comment[i + 1])))
+            # print 'Comments: '+str(featureComment[i+1])
         if 'true' in feature_mystery:
             i = feature_mystery.index('true')
+            # print 'Mysteries: '+str(featureMystery[i+1])
             facet_string += ('<li>'
                              '%s%s&amp;fm=true">'
                              '<img src="%s" alt="mysteries" class="img-icon"/> '
-                             '&#160; %s: %s'
+                             '&#160; %s (%s)'
                              '</a>'
                              '</li>'
                              % (base_results_url,
                                 search_qs,
                                 type_icons('mystery', 'icon'),
                                 site_language['AdvLabelMystery'],
-                                str(feature_mystery[i+1])))
+                                str(feature_mystery[i + 1])))
         facet_string += '</ul></fieldset>'
 
     if rights_creative_commons:
@@ -333,14 +378,22 @@ def facet_panel(facets, search_qs, site_language):
                                            'fcc',
                                            'Creative Commons',
                                            search_qs,
-                                           site_language)
+                                           site_language,
+                                           query_dict)
+    # print facetString
     facet_string += '</div>'
     return facet_string
 
 
-def facet_list_anchors(list_name, portal_field, legend, search_qs, site_language):
+def facet_list_anchors(list_name, portal_field, legend, search_qs, site_language, query_dict):
     anchors = ''
     sort_show = ''
+    existing_query = ''
+    # check for portal_field in query_dict
+    if portal_field in query_dict:
+        existing_query = query_dict[portal_field]
+        # log_request('portal_field (utilities.395)', portal_field)
+        # log_request('existing_query (utilities.396)', existing_query)
     open_fieldset = ('<fieldset id="%s"><legend>%s</legend><ul class="options" id="%s-sort">'
                      % (portal_field, legend, portal_field))
     close_list = '</ul>'
@@ -348,15 +401,31 @@ def facet_list_anchors(list_name, portal_field, legend, search_qs, site_language
     # TODO eliminate 'None (0)' as value ... shouldn't be coming from solr, but it is
     more_list = False
     end_anchor = '</a>'
-    if len(list_name) > 10 and portal_field != 'mt':
+    if len(list_name) > 10 and portal_field != 'mt' and portal_field != 'fcc':
         more_list = True
+        # extra = (len(list_name)-6)/2
+    suppress_anchor = False
     for i in range(len(list_name)):
         if i % 2 == 1:
-            # process count
             countli = str(list_name[i])
-            anchors += ' (<span title="%s">%s</span>)%s</li>' % (countli, countli, end_anchor)
+            if suppress_anchor is False:
+                anchors += ' (<span title="%s">%s</span>)%s</li>' % (countli, countli, end_anchor)
+            else:
+                # reset suppress_anchor
+                suppress_anchor = False
         else:
-            # process label
+            value = str(list_name[i])
+            re_value = value
+            re_value = re_value.replace('\\', '\\\\')
+            re_value = re_value.replace('(', '\\(')
+            re_value = re_value.replace('?', '\\?')
+            re_value = re_value.replace(')', '\\)')
+            re_value = '\\b%s\\b' % re_value
+            value_found = re.search(re_value, existing_query)
+            # log_request('re_value (utilities.423)', re_value)
+            # log_request('value_found (utilities.424)', value_found)
+            if value_found:
+                suppress_anchor = True
             if portal_field == 'mt':
                 type_class = type_icons(list_name[i], 'class')
                 list_class = '<li class="%s">' % type_class
@@ -381,16 +450,18 @@ def facet_list_anchors(list_name, portal_field, legend, search_qs, site_language
                 local_base_results_url = base_results_url
                 end_anchor = '</a>'
             # TODO set itemtype up as tagcloud with relative size logic
-            if list_name[i+1] > 0 and original_label != 'None':
+            if list_name[i + 1] > 0 and original_label != 'None' and label and suppress_anchor is False:
                 anchors += ('%s%s%s&amp;%s=%s">%s'
                             % (list_class,
                                local_base_results_url,
                                search_qs,
                                portal_field,
-                               urlquote(list_name[i]),
+                               parse.quote_plus(list_name[i]),
                                label))
+            elif label and original_label != 'None':
+                anchors += '%s<div class="facetFilterActive">%s</div></li>' % (list_class, label)
             else:
-                anchors += list_class + label
+                suppress_anchor = True
     if more_list:
         sort_show = ('<div '
                      'id="%s-more">'
@@ -412,33 +483,6 @@ def facet_list_anchors(list_name, portal_field, legend, search_qs, site_language
     return fieldset
 
 
-def sort_variables(facets):
-    json_string = ''
-    for facet in facets:
-        facet_list = facets[facet]
-        if len(facet_list) > 10:
-            json_string += 'var %s = {' % facet
-            for i in range(len(facet_list)):
-                if i % 2 == 1:
-                    json_string += '%s' % str(facet_list[i])
-                else:
-                    label = str(facet_list[i])
-                    if i > 0:
-                        json_string += ', "%s": ' % label
-                    else:
-                        json_string += '%s: ' % label
-            json_string += '}'
-    return json_string
-
-
-def parse_xml(response_doc, xsl_file):
-    xml_doc = etree.parse(response_doc)
-    styledoc = etree.parse(xsl_file)
-    style = etree.XSLT(styledoc)
-    xml_transformed = style(xml_doc)
-    return xml_transformed
-
-
 def type_icons(dctype, response):
     # media specific calls, expect "response" value to be either 'icon' or 'class'
     dctype = dctype.lower()
@@ -446,53 +490,62 @@ def type_icons(dctype, response):
     icon_url = ''
     icon_class = ''
     if dctype == 'audio':
-        icon = 'icon_audio.jpg'
+        icon = 'audio.png'
         icon_class = dctype
     elif dctype == 'collection':
-        icon = 'icon_collection.jpg'
+        icon = 'collection.png'
         icon_class = dctype
     elif dctype == 'genealogical resource' or dctype == 'genealogicalresource':
-        icon = 'icon_genealogy.jpg'
+        icon = 'genealogy.png'
         icon_class = 'genealogy'
     elif dctype == 'image':
-        icon = 'icon_images.jpg'
+        icon = 'image.png'
         icon_class = 'images'
     elif dctype == 'newspaper':
-        icon = 'icon_newspaper.jpg'
+        icon = 'newspaper.png'
         icon_class = dctype
     elif dctype == 'object' or dctype == 'physical object' or dctype == 'physicalobject':
-        icon = 'icon_object.jpg'
+        icon = 'object.png'
         icon_class = dctype
     elif dctype == 'publication':
-        icon = 'icon_publication.jpg'
+        icon = 'publication.png'
         icon_class = dctype
     elif dctype == 'text':
-        icon = 'icon_text.jpg'
+        icon = 'text.png'
         icon_class = dctype
     elif dctype == 'video':
-        icon = 'icon_video.jpg'
+        icon = 'video.png'
         icon_class = dctype
     elif dctype == 'website':
-        icon = 'icon_website.jpg'
+        icon = 'website.png'
         icon_class = dctype
     elif dctype == 'group':
-        icon = 'icon_group.gif'
+        icon = 'group.png'
         icon_class = dctype
     elif dctype == 'exhibit':
-        icon = 'icon_exhibit.gif'
+        icon = 'exhibit.png'
         icon_class = dctype
     elif dctype == 'mystery':
-        icon = 'icon_mystery.gif'
+        icon = 'mystery.png'
         icon_class = dctype
     elif dctype == 'comment':
-        icon = 'icon_comment.gif'
+        icon = 'comment.png'
         icon_class = dctype
     elif dctype == 'issue':
-        icon = 'icon_text.jpg'
+        icon = 'text.png'
         icon_class = dctype
     elif dctype == 'place':
-        icon = 'icon_place.jpg'
+        icon = 'place.png'
         icon_class = dctype
+    elif dctype == 'organization':
+        icon = 'organization.png'
+        icon_class = dctype
+    elif dctype == 'ship':
+        icon = 'ship.png'
+        icon_class = dctype
+    elif dctype == 'ship document' or dctype == 'shipdocument':
+        icon = 'shipdoc.png'
+        icon_class = 'shipdocument'
     else:
         icon = ''
     if icon != '':
@@ -504,32 +557,9 @@ def type_icons(dctype, response):
         return icon_class
 
 
-def get_parts(url, output_format):
-    try:
-        conn = urllib.request.urlopen(url)
-        if output_format == "xml":
-            rdata = []
-            chunk = 'xx'
-            while chunk:
-                chunk = conn.read()
-                if chunk:
-                    rdata.append(chunk)
-            str1 = rdata
-        else:
-            str_response = conn.readall().decode('utf-8')
-            str1 = json.loads(str_response)
-        conn.close()
-    except IOError:
-        str1 = 'error!'
-    if isinstance(str1, list):
-        return_string = str1[0]
-    else:
-        return_string = str1
-    return return_string
-
-
 def get_decades(facets, search_qs, site_language):
     temp_decades = facets['fDateDecade'][::2]
+    # print(temp_decades)
     decades = []
     for dec in temp_decades:
         if isinstance(dec, int):
@@ -544,15 +574,17 @@ def get_decades(facets, search_qs, site_language):
                 dec_int = int(dec)
                 if len(dec) == 3:
                     dec = '%s0' % dec
-                    dec_int *= 10
+                    dec_int = dec_int * 10
                 if dec_int > 1500:
                     decades.append(dec)
+    # len_decades = len(decades)
     if len(decades) < 1:
         # if we can't process the decades then return an empty string
         return ""
     else:
         decade_row = ''
         temp_years = facets['fDateYear'][::2]
+        # print(temp_years)
         years = []
         for yr in temp_years:
             if isinstance(yr, int):
@@ -563,12 +595,13 @@ def get_decades(facets, search_qs, site_language):
                     years.append(yr)
                 else:
                     years.append("")
+        # print(years)
         bottom_floor = decades[0]
         floor_i = int(bottom_floor)
         year = floor_i
         # look at last for string of 4 characters
         # if not, loop back to previous decade and repeat test
-        # test for extent beyond current decade ...
+        # perhaps add test for extent beyond current decade ...
         ceiling_decade = int(decades[-1])
         this_decade = current_decade()
         if ceiling_decade > this_decade:
@@ -581,13 +614,14 @@ def get_decades(facets, search_qs, site_language):
         footer = '</table></div></fieldset>'
         while floor_i < (ceiling_decade + 1):
             floor_s = str(floor_i)
+            floor_dd = str(int(floor_i / 10))
             decade_row += ('<tr>'
                            '<td class="decade">'
                            '<a href="results?dd=%s&amp;%s">'
                            '%s'
                            '</a>'
                            '</td>'
-                           % (floor_s, search_qs, floor_s))
+                           % (floor_dd, search_qs, floor_s))
             floor_i += 10
             # iterate through the decade
             while year < floor_i:
@@ -627,6 +661,8 @@ def get_media_label(mt, site_language):
         media_label = site_language['AdvLabelMediaGenealogy']
     elif mt_upper == 'NEWSPAPER':
         media_label = site_language['AdvLabelMediaNewspapers']
+    elif mt_upper == 'ORGANIZATION':
+        media_label = site_language['AdvLabelMediaOrganization']
     elif mt_upper == 'PUBLICATION':
         media_label = site_language['AdvLabelMediaPublication']
     elif mt_upper == 'PLACE':
@@ -637,6 +673,8 @@ def get_media_label(mt, site_language):
         media_label = site_language['AdvLabelMediaExhibit']
     elif mt_upper == 'SHIP':
         media_label = site_language['AdvLabelMediaShip']
+    elif mt_upper == 'SHIP DOCUMENT':
+        media_label = site_language['AdvLabelMediaShipDocs']
     return media_label
 
 

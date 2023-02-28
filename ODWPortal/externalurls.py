@@ -1,37 +1,17 @@
-import urllib
-import json
+from urllib import parse
 from lxml import etree
-from django.utils.http import urlquote
 from ODWPortal.utilities import get_media_label
 from ODWPortal.querySolr import solr_query
+from ODWPortal.parts import get_solr
 from Portal.settings import XSL_PATH, SOLR_URL
 
-solr = '%ssearch/select/?wt=json' % SOLR_URL
-solr_xml = '%ssearch/select/?' % SOLR_URL
+# from Portal.customlog import log_request
+
+solr = '%ssearch/query/?wt=json' % SOLR_URL
+solr_xml = '%ssearch/query/?wt=xml' % SOLR_URL
 
 
-def get_solr(url, output_format):
-    try:
-        conn = urllib.request.urlopen(url)
-        if output_format == "xml":
-            rdata = []
-            chunk = 'xx'
-            while chunk:
-                chunk = conn.read()
-                if chunk:
-                    rdata.append(chunk)
-            str1 = rdata
-        else:
-            str_response = conn.readall().decode('utf-8')
-            str1 = json.loads(str_response)
-        conn.close()
-    except IOError:
-        str1 = 'error!'
-    if isinstance(str1, list):
-        return_value = str1[0]
-    else:
-        return_value = str1
-    return return_value
+# TODO exactly the same code as get_parts ... reconcile
 
 
 def get_facet(f, search_set):
@@ -57,6 +37,8 @@ def list_facet(solr_field, portal_field, result_path, display, site_language, se
             facet_list = html_list('radio', labels, counts, portal_field, result_path, site_language)
         elif display == 'checkbox':
             facet_list = html_list('checkbox', labels, counts, portal_field, result_path, site_language)
+        elif display == 'plain_list':
+            facet_list = plain_list(labels, counts, portal_field, result_path, site_language)
         else:
             facet_list = ''
     return facet_list
@@ -64,20 +46,22 @@ def list_facet(solr_field, portal_field, result_path, display, site_language, se
 
 def option_list(labels, counts):
     html = ''
-    for l, c in zip(labels, counts):
-        if len(l) > 0:
-            html += '<option value="%s">%s (%s)</option> \n' % (l, l, c)
+    for label, count in zip(labels, counts):
+        if len(label) > 0:
+            html += '<option value="%s">%s (%s)</option> \n' % (label, label, count)
     return html
 
 
 def html_list(display, labels, counts, portal_field, result_path, site_language):
     html = ''
-    for l, c in zip(labels, counts):
+    for label, count in zip(labels, counts):
         if portal_field == 'mt':
-            label = get_media_label(l.title(), site_language)
+            original_label = label
+            label = get_media_label(label.title(), site_language)
         else:
-            label = l
-        query = urlquote(l)
+            original_label = label
+            label = label
+        query = parse.quote_plus(label)
         if label:
             html += (('<li>'
                       '<input id="%s_%s" '
@@ -90,19 +74,26 @@ def html_list(display, labels, counts, portal_field, result_path, site_language)
                       '</a>'
                       '</label> (%s)'
                       '</li>')
-                      % (portal_field,
-                         ''.join(l.split(' ')),
-                         display,
-                         portal_field,
-                         l,
-                         portal_field,
-                         ''.join(l.split(' ')),
-                         result_path,
-                         portal_field,
-                         query,
-                         label,
-                         c)
-                     )
+                     % (portal_field, ''.join(label.split(' ')),
+                        display,
+                        portal_field, original_label,
+                        portal_field, ''.join(label.split(' ')),
+                        result_path, portal_field, query,
+                        label, count))
+    return html
+
+
+def plain_list(labels, counts, portal_field, result_path, site_language):
+    html = ''
+    for label, count in zip(labels, counts):
+        if portal_field == 'mt':
+            label = get_media_label(label.title(), site_language)
+        else:
+            label = label
+        query = parse.quote_plus(label)
+        if label:
+            html += '<li><a href="/%s?%s=%s">%s</a> (%s)</li>' \
+                     % (result_path, portal_field, query, label, count)
     return html
 
 
@@ -110,7 +101,7 @@ def media_facet(request, result_path, search_set):
     nvps = request
     if 'mt' in nvps:
         media_type = nvps.get('mt')
-        query = urlquote(media_type)
+        query = parse.quote_plus(media_type)
         url = ('%s&q=(type:%s+AND+%s)'
                '&rows=0'
                '&facet=true'
@@ -124,8 +115,8 @@ def media_facet(request, result_path, search_set):
             labels = facets[::2]
             counts = facets[1::2]
             html = ''
-            for l, c in zip(labels, counts):
-                item_type = urlquote(l)
+            for label, count in zip(labels, counts):
+                item_type = parse.quote_plus(label)
                 html += ('<li>'
                          '<input type="checkbox" '
                          'id="%s" '
@@ -135,7 +126,9 @@ def media_facet(request, result_path, search_set):
                          '<label for="%s">%s</label>'
                          '</a>'
                          ' (%s)</li>'
-                         % (''.join(l.split(' ')), l, result_path, item_type, media_type, ''.join(l.split(' ')), l, c))
+                         % (''.join(label.split(' ')), label, result_path,
+                            item_type, media_type, ''.join(label.split(' ')),
+                            label, count))
             return html
     else:
         return ''
@@ -151,22 +144,9 @@ def query_solr_url(request, output_format, xml_type, search_set):
         url = solr_xml + query_str
     else:
         url = solr + query_str
+    # log_request('url (enternalurls.151)', url)
     solr_result = get_solr(url, output_format)
     return solr_result, query_dict
-
-
-def get_kml_count(request, search_set):
-    kml_query, query_dict = solr_query(request, 'kml', search_set)
-    if kml_query:
-        url = solr + kml_query
-        kml_response = get_solr(url, 'json')
-        if isinstance(kml_response, dict):
-            kml_count = int(kml_response['response']['numFound'])
-        else:
-            kml_count = 0
-    else:
-        kml_count = 0
-    return kml_count
 
 
 def get_docs(request, search_set):
@@ -176,6 +156,7 @@ def get_docs(request, search_set):
     facets = {}
     solr_response, query_dict = query_solr_url(request, 'json', 'html', search_set)
     if isinstance(solr_response, dict):
+        # log_request('solr_response (enternalurls.178)', solr_response)
         rows = solr_response['responseHeader']['params']['rows']
         num_found = solr_response['response']['numFound']
         docs = solr_response['response']['docs']
@@ -187,36 +168,23 @@ def get_docs(request, search_set):
     return solr_response, num_found, rows, page_num, docs, facets, query_dict
 
 
-def get_html(request, querystring, lang, search_set):
-    solr_response_list = query_solr_url(request, 'xml', 'stuff', search_set)
-    response_doc = solr_response_list[0]
-    xml_doc = etree.parse(response_doc)
-    if lang == 'fr':
-        xsl_file = '%ssearch_result_fr.xsl' % XSL_PATH
-    else:
-        xsl_file = '%ssearch_result_min.xsl' % XSL_PATH
-    style_doc = etree.parse(xsl_file)
-    style = etree.XSLT(style_doc)
-    qs = "'%s'" % querystring
-    param_page = etree.XSLT.strparam("1")
-    param_unparsed_query = etree.XSLT.strparam(qs)
-    xml_transformed = style(xml_doc, page=param_page, unparsedQuery=param_unparsed_query)
-    return xml_transformed
-
-
 def get_xml(request, xml_type, search_set):
     """
     take request and transform into appropriate xml package.
-    Supports DC, MODS, RDF, KML and SOLR.
+    Supports DC, MODS, RDF and SOLR.
     """
     solr_response_list = query_solr_url(request, 'xml', xml_type, search_set)
+    # print('solr_response_list: ', solr_response_list)
     response_doc = solr_response_list[0]
     str_response_doc = response_doc.decode('utf-8')
     str_response_doc = str_response_doc.replace('<?xml version="1.0" encoding="UTF-8"?>\n', '')
+    # print('str_response_doc: ', str_response_doc)
     if xml_type != "solr":
         xml_doc = etree.XML(str_response_doc)
+        # print xmlDoc
         xsl_file = '%s%s.xsl' % (XSL_PATH, xml_type)
         style_doc = etree.parse(xsl_file)
+        # print styledoc
         style = etree.XSLT(style_doc)
         xml_transformed = style(xml_doc)
     else:
@@ -237,24 +205,3 @@ def get_count(request, search_set):
     if isinstance(solr_result, dict):
         count = solr_result['response']['numFound']
     return count
-
-
-def get_pref_collation(suggestions):
-    """
-    solr does not order the alternate spelling suggestions by frequency of occurrence
-     so we need to loop through looking for the most frequent
-    """
-    top_hits = 0
-    pref_collation = ''
-    suggestion_dict1 = suggestions[1]
-    if isinstance(suggestion_dict1, dict):
-        if 'suggestion' in suggestion_dict1.keys():
-            suggestion_list2 = suggestion_dict1.get('suggestion')
-            for item in suggestion_list2:
-                suggestion_dict2 = item
-                hits = int(suggestion_dict2.get('freq'))
-                collation = suggestion_dict2.get('word')
-                if hits > top_hits:
-                    top_hits = hits
-                    pref_collation = collation
-    return pref_collation
