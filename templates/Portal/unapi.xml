@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <formats xmlns:cinclude="http://apache.org/cocoon/include/1.0" {% if unapi_id %}id="{{ unapi_id }}"{% endif %}>
-        <format docs="http://www.openarchives.org/OAI/2.0/oai_dc.xsd" type="application/xml" name="oai_dc"/>
-        <format docs="http://www.loc.gov/standards/mods//v3/mods-3-3.xsd" type="application/xml" name="mods"/>
-</formats>
