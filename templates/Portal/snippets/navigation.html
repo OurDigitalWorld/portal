@@ -7,28 +7,28 @@
         {% endif %}
 		<li>|</li> 
 		<li><a href="about">{%if pageName == 'About'%}<b>{{ site_language.nav_about }}</b>{%else%}{{ site_language.nav_about }}{%endif%}</a></li>
-		<li><a href="faq">{%if pageName == 'FAQ'%}<b>{{ site_language.nav_faq }}</b>{%else%}{{ site_language.nav_faq }}{%endif%}</a></li>
+		<li>|</li>
+        <li><a href="contributors">{{ site_language.AdvLabelContributor }}</a></li>
+		<li>|</li>
+		{% if site_values.navHelpboolean == "1" %}
 		<li><a href="help">{%if pageName == 'Help'%}<b>{{ site_language.nav_help }}</b>{%else%}{{ site_language.nav_help }}{%endif%}</a></li>
 		<li>|</li>
+        {% endif %}
         {% if site_values.nav_alt_lang_url %}
             {% if pageName == "mediatype" %}
                 <li><a href="{{ site_values.nav_alt_lang_url }}mediatype?mt={{ request.GET.mt }}">{{ site_values.nav_alt_lang_label }}</a></li>
             {%elif pageName == "Results"%}
                 <li><a href="{{ site_values.nav_alt_lang_url }}results?{{ request.GET.urlencode }}">{{ site_values.nav_alt_lang_label }}</a></li>
-            {%elif pageName == "Search Widget"%}
-                <li><a href="{{ site_values.nav_alt_lang_url }}searchwidgets">{{ site_values.nav_alt_lang_label }}</a></li>
             {%elif pageName == "Advanced"%}
                 <li><a href="{{ site_values.nav_alt_lang_url }}advsearch">{{ site_values.nav_alt_lang_label }}</a></li>
             {% else %}
                 <li><a href="{{ site_values.nav_alt_lang_url }}{{ pageName }}">{{ site_values.nav_alt_lang_label }}</a></li>
             {% endif %}
+			<li>|</li>
         {% endif %}
-		{%if pageName != "Results"%}
-		<li>|</li>
 		<li>
 			{% include "Portal/snippets/socialBookmark.html"%}
 		</li>
-		{% endif %}
 	</ul>
 	<br />
 	<br />

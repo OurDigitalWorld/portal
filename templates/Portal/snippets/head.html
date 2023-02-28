@@ -1,20 +1,19 @@
-{% load staticfiles %}
+{% load static %}
 <head>
 	<title>{{  pageName }}: {{ site_values.site_name }}</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 	<meta name="author" content="{{ site_values.site_name }}" />
-	<link rel="stylesheet" type="text/css" href="{% static "css/OurOntHeader2.css"%}" />
-	<link rel="stylesheet" type="text/css" href="{% static "css/views.css"%}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/layout.css'%}" >
+	<link rel="stylesheet" type="text/css" href="{% static 'css/extra.css'%}" >
+	<link rel="stylesheet" type="text/css" href="{{ site_values.branding_css }}" >
 	<link rel="shortcut icon" href="{{ site_values.Favicon }}" type="image/x-icon" />
-	<link rel="search" type="application/opensearchdescription+xml" title="OurOntario.ca" href="opensearch" />
     {% include "Portal/snippets/google_analytics.html" %}
 	{% if pageName == "Results"%}
-	<link rel="unapi-server" type="application/xml" title="unAPI" href="unapi" />
 	<link rel="alternate" type="application/rss+xml" title="{{  pageName }}" href="rss?{{ unparsedQuery }}&amp;p={{ page }}" id="gallery" />
 	{% endif %}
     {% if jquery == "true" %}
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <script type="text/javascript" src="{% static "js/jquery.tinysort.min.js"%}">   </script>
+        <script type="text/javascript" src="{% static 'js/jquery.tinysort.min.js'%}">   </script>
 
     {% if javascript_page == "Results"%}
         <script type="text/javascript">
@@ -143,14 +142,6 @@
                 $( "#2colview" ).on( "click", function( event ) {
                     //alert( "Hello galleryview." );
                     $('#resultList').attr('class', 'double')
-                });
-                $( "#multi_site" ).on( "click", function( event ) {
-                    //alert( "Hello multisite request." );
-                    window.location = '{{ alt_url }}'
-                });
-                $( "#single_site" ).on( "click", function( event ) {
-                    //alert( "Hello single site request." );
-                    window.location = '{{ alt_url }}'
                 });
 
             });

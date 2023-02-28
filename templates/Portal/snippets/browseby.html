@@ -1,0 +1,11 @@
+{% load static %}
+
+<div class="browseby">
+	{% if site_values.navBrowseBy == "OO8" %}
+		{% include "Portal/snippets/searchBrowsePanel_OO8.html" %}
+	{%elif site_values.navBrowseBy == "GL8"%}
+		{% include "Portal/snippets/searchBrowsePanel_GL8.html" %}
+	{%else%}
+		{% include "Portal/snippets/searchBrowsePanel16.html" %}
+	{% endif %}
+</div>
