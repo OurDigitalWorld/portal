@@ -1,19 +1,31 @@
 import json
+from urllib.parse import quote
 from django.shortcuts import render
 from django.http import HttpRequest
 import ODWPortal.externalurls
-from ODWPortal.utilities import page_navigation, facet_panel, get_doc_block, sort_variables, get_media_label
+from ODWPortal.utilities import page_navigation, facet_panel, get_doc_block, get_media_label
 from ODWPortal.querySolr import search_logic, search_query, facet_query, get_search_set
-from ODWPortal.altsearch import alt_search
 from Portal.hostdiscovery import site_settings, site_language
+from Portal.slideshow import get_slideshow
+# from Portal.customlog import log_request
 
 
 def index(request):
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
+    # print(site_lang['page_name_search'])
+    block = site_values['search_content_block']
+    block_list = site_values['search_content_block_li']
+    search_content_block_rev = block.replace("LI_XXXXX_LI", block_list)
+    encoded_url = quote(HttpRequest.build_absolute_uri(request))
+    page_name = '%s: %s' % (site_lang['NBLabelSearchForm'], site_values['site_name'])
+    encoded_page_name = quote(page_name)
     context = {
         'site_values': site_values,
         'site_language': site_lang,
+        'search_content_block_rev': search_content_block_rev,
+        'encoded_url': encoded_url,
+        'encoded_page_name': encoded_page_name,
     }
     return render(request, 'Portal/search.html', context)
 
@@ -21,89 +33,54 @@ def index(request):
 def about(request):
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
+    encoded_url = quote(HttpRequest.build_absolute_uri(request))
+    page_name = '%s: %s' % (site_lang['about_label_page'], site_values['site_name'])
+    encoded_page_name = quote(page_name)
     context = {
         'site_values': site_values,
         'site_language': site_lang,
+        'encoded_url': encoded_url,
+        'encoded_page_name': encoded_page_name,
     }
     return render(request, 'Portal/about.html', context)
-
-
-def faq(request):
-    site_values = site_settings(request)
-    site_lang = site_language(site_values['language'])
-    context = {
-        'site_values': site_values,
-        'site_language': site_lang,
-    }
-    return render(request, 'Portal/faq.html', context)
 
 
 def help_request(request):
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
+    encoded_url = quote(HttpRequest.build_absolute_uri(request))
+    page_name = '%s: %s' % (site_lang['NBLabelHelp'], site_values['site_name'])
+    encoded_page_name = quote(page_name)
     context = {
         'site_values': site_values,
         'site_language': site_lang,
+        'encoded_url': encoded_url,
+        'encoded_page_name': encoded_page_name,
     }
     return render(request, 'Portal/help.html', context)
-
-
-def searchwidgets(request):
-    # the options page
-    site_values = site_settings(request)
-    site_lang = site_language(site_values['language'])
-    context = {
-        'site_values': site_values,
-        'site_language': site_lang,
-    }
-    return render(request, 'Portal/searchwidgets.html', context)
-
-
-def searchwidget(request):
-    # the linkable widget
-    site_values = site_settings(request)
-    site_lang = site_language(site_values['language'])
-    context = {
-        'site_values': site_values,
-        'site_language': site_lang,
-    }
-    return render(request, 'Portal/searchwidget.html', context)
-
-
-def kml(request):
-    site_values = site_settings(request)
-    site_lang = site_language(site_values['language'])
-    context = {
-        'site_values': site_values,
-        'site_language': site_lang,
-    }
-    return render(request, 'Portal/kml.html', context)
-
-
-def features(request):
-    site_values = site_settings(request)
-    site_lang = site_language(site_values['language'])
-    context = {
-        'site_values': site_values,
-        'site_language': site_lang,
-    }
-    return render(request, 'Portal/features.html', context)
 
 
 def contributors(request):
     site_values = site_settings(request)
     site_lang = site_language(site_values['language'])
     search_set = get_search_set(site_values)
+    contribute_display = site_values['ContributorsListDisplay']
     facet_list = ODWPortal.externalurls.list_facet("site",
                                                    "site",
                                                    'results',
-                                                   'checkbox',
+                                                   contribute_display,
                                                    site_lang,
                                                    search_set)
+    encoded_url = quote(HttpRequest.build_absolute_uri(request))
+    page_name = '%s: %s' % (site_lang['DetLabelContributors'], site_values['site_name'])
+    encoded_page_name = quote(page_name)
     context = {
         'site_values': site_values,
         'site_language': site_lang,
-        'facetList': facet_list,
+        'facet_list': facet_list,
+        'encoded_url': encoded_url,
+        'encoded_page_name': encoded_page_name,
+        'contribute_display': contribute_display,
     }
     return render(request, "Portal/contributors.html", context)
 
@@ -115,31 +92,30 @@ def mediatype(request):
     facet_list = ODWPortal.externalurls.media_facet(request.GET, 'results', search_set)
     mt = request.GET['mt']
     media_label = get_media_label(mt, site_lang)
+    encoded_url = quote(HttpRequest.build_absolute_uri(request))
+    page_name = '%s: %s' % (site_lang['DetLabelMediaType'], site_values['site_name'])
+    encoded_page_name = quote(page_name)
     context = {
         'site_values': site_values,
         'site_language': site_lang,
-        'facetList': facet_list,
+        'facet_list': facet_list,
         'request': request.GET,
         'mediaLabel': media_label,
+        'encoded_url': encoded_url,
+        'encoded_page_name': encoded_page_name,
     }
     return render(request, "Portal/mediatypes.html", context)
 
 
-def results(request, result_type):
+def results(request):
     search_q = ''
     just_q = ''
     search_logic_string = ''
+    q_logic = ''
     site_values = site_settings(request)
     search_set = get_search_set(site_values)
     site_lang = site_language(site_values['language'])
-    current_url = HttpRequest.build_absolute_uri(request)
-    if "results" in current_url:
-        alt_url = current_url.replace('results', 'resultm')
-    else:
-        alt_url = current_url.replace('resultm', 'results')
     request_q = request.GET.copy()
-    if result_type == 'multipane':
-        request_q['rows'] = '3'
     (solr_response,
      num_found,
      rows,
@@ -148,103 +124,53 @@ def results(request, result_type):
      facets,
      query_dict) = ODWPortal.externalurls.get_docs(request_q, search_set)
     num_found_int = int(num_found)
-    alt_collation = ''
-    original_num_found = num_found_int
     if 'q' in query_dict:
         original_q = query_dict.__getitem__('q')
     else:
         original_q = ''
 
     # do we need to try again with the spelling suggestions
-    tried_alt_spelling = False
-    if not num_found_int:
-        # look to see if there are alternate spellings and run again with those
-        suggestions = solr_response['spellcheck']['suggestions']
-        i = suggestions.index(u'correctlySpelled')
-        correctly_spelled = suggestions[i+1]
-        if not correctly_spelled:
-            tried_alt_spelling = True
-            alt_collation = ODWPortal.externalurls.get_pref_collation(suggestions)
-            if alt_collation:
-                request_q2 = request_q.copy()
-                request_q2.__setitem__('q', alt_collation)
-
-                # re-execute search
-                (solr_response,
-                 num_found,
-                 rows,
-                 page_num,
-                 docs,
-                 facets,
-                 query_dict_2) = ODWPortal.externalurls.get_docs(request_q2, search_set)
-                num_found_int = int(num_found)
-                search_logic_string = search_logic(query_dict_2, site_lang)
-                search_q, just_q = search_query(query_dict_2)
-    else:
-        search_logic_string = search_logic(query_dict, site_lang)
+    if isinstance(query_dict, dict):
+        # PartsQ, PartsQD = solr_query(request_q, 'extAltSearch', search_set)
+        search_logic_string, q_logic = search_logic(query_dict, site_lang, site_values)
+        # print('searchLogicString(144): ', searchLogicString)
         search_q, just_q = search_query(query_dict)
-    if site_values['use_external_links'] == '1':
-        alt_search_results = alt_search(
-            site_values['site_id'],
-            request_q,
-            'results')
-    else:
-        alt_search_results = ''
 
-    kml_count = ODWPortal.externalurls.get_kml_count(request.GET, search_set)
+    # Check for number of records for search criteria with lat/long values and
     docs = solr_response['response']['docs']
     highlighting = solr_response['highlighting']
-    document_panel = get_doc_block(docs, just_q, highlighting, 'resultView', site_lang)
+    document_panel = get_doc_block(docs, just_q, highlighting, 'resultView', site_lang, site_values)
     int_rows = int(rows)
     page_nav_bar = page_navigation(num_found_int, int_rows, page_num, search_q, site_lang)
-    facet_panels = facet_panel(facets, search_q, site_lang)
-    sort_json = sort_variables(facets)
+    facet_panels = facet_panel(facets, search_q, site_lang, query_dict)
     facet_q = facet_query(query_dict)
-    start = solr_response['response']['start']
+
+    encoded_url = quote(HttpRequest.build_absolute_uri(request))
+    page_name = '%s: %s' % (site_lang['NBLabelResults'], site_values['site_name'])
+    encoded_page_name = quote(page_name)
     context = {
-        "document_panel": document_panel,
-        "facets": facets,
-        "facetPanels": facet_panels,
-        "sortJson": sort_json,
-        "numFound": num_found,
-        "OriginalNumFound": original_num_found,
-        "OriginalQ"
-        "start": start,
-        "rows": rows,
-        "pageNum": page_num,
-        "pageNavBar": page_nav_bar,
-        'alt_search_results': alt_search_results,
-        "searchLogicString": search_logic_string,
-        "OriginalQ": original_q,
-        "searchQ": search_q,
-        "altCollation": alt_collation,
-        "facetQ": facet_q,
-        "KMLCount": kml_count,
-        "triedAltSpelling": tried_alt_spelling,
         'site_values': site_values,
         'site_language': site_lang,
-        'resultType': result_type,
-        'alt_url': alt_url,
+        'encoded_url': encoded_url,
+        'encoded_page_name': encoded_page_name,
+        "document_panel": document_panel,
+        "facet_panels": facet_panels,
+        "num_found": num_found,
+        "page_nav_bar": page_nav_bar,
+        "search_logic_string": search_logic_string,
+        "query_logic": q_logic,
+        'original_q': original_q,
+        "search_q": search_q,
+        "facet_q": facet_q,
     }
     return render(request, "Portal/results.html", context)
-
-
-def results_xml(request):
-    site_values = site_settings(request)
-    search_set = get_search_set(site_values)
-    querystring = request.META['QUERY_STRING']
-    solr_xml = ODWPortal.externalurls.get_html(request.GET, querystring, 'en', search_set)
-    return render(request, "Portal/resultsXML_en.html", {"solrResponse": solr_xml})
 
 
 def xml(request, xml_type):
     site_values = site_settings(request)
     search_set = get_search_set(site_values)
     solr_response = ODWPortal.externalurls.get_xml(request.GET, xml_type, search_set)
-    if xml_type == 'kml':
-        mime_str = "application/vnd.google-earth.kml+xml"
-    else:
-        mime_str = "text/xml"
+    mime_str = "text/xml"
     return render(request,
                   "Portal/xml.html",
                   {"solrResponse": solr_response},
@@ -264,16 +190,6 @@ def json_handler(request):
                   "Portal/xml.html",
                   {"solrResponse": json_response},
                   content_type="application/json")
-
- 
-def opensearch(request):
-    site_values = site_settings(request)
-    site_lang = site_language(site_values['language'])
-    context = {
-        'site_values': site_values,
-        'site_language': site_lang,
-    }
-    return render(request, "opensearch.xml", context,  content_type="text/xml")
 
 
 def advsearch(request):
@@ -295,8 +211,8 @@ def advsearch(request):
     return render(request, "Portal/advsearch.html", {
         'site_values': site_values,
         'site_language': site_lang,
-        "siteList": site_list,
-        "mediaTypeList": media_type_list
+        "site_list": site_list,
+        "media_type_list": media_type_list
     })
 
 
@@ -305,26 +221,10 @@ def count(request):
     search_set = get_search_set(site_values)
     result_count = ODWPortal.externalurls.get_count(request.GET, search_set)
     mime_str = "text/plain"
-    # using the xml template because we can drop in a raw response, in this case just an integer
     return render(request, "Portal/xml.html", {"solrResponse": result_count}, content_type=mime_str)
 
 
-def unapi(request):
-    site_values = site_settings(request)
-    search_set = get_search_set(site_values)
-    mime_str = "application/xml"
-    if request.GET.get('format'):
-        xml_type = request.GET.get('format')
-        solr_response = ODWPortal.externalurls.get_xml(request.GET, xml_type, search_set)
-        return render(request,
-                      "Portal/xml.html",
-                      {"solrResponse": solr_response},
-                      content_type=mime_str)
-    elif request.GET.get('id'):
-        unapi_id = request.GET.get('id')
-        context = {
-            "unapi_id": unapi_id,
-        }
-        return render(request, "Portal/unapi.xml", context, content_type=mime_str)
-    else:
-        return render(request, "Portal/unapi.xml", content_type=mime_str)
+def slideshow(request):
+    response = get_slideshow(request)
+    mime_str = "text/plain"
+    return render(request, "Portal/xml.html", {"solrResponse": response}, content_type=mime_str)

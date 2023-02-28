@@ -2,12 +2,15 @@ __author__ = 'walter'
 
 from django.http import HttpRequest
 from ODWPortal.models import Site, SiteSetup, Language
+# from Portal.customlog import log_request
 
 
 def site_host(request):
     site_dict = {}
     host = HttpRequest.build_absolute_uri(request)
+    # log_request('host', host)
     sites = Site.objects.order_by('-site_url')
+    # log_request('sites', sites)
     for site in sites:
         if host.startswith(site.site_url):
             site_dict['site_id'] = site.id
@@ -15,6 +18,9 @@ def site_host(request):
             site_dict['site_url'] = site.site_url
             site_dict['language'] = site.language
             break
+        else:
+            # need a default to redirect to if the url isn't entered yet
+            one = 1
     return site_dict
 
 
@@ -23,7 +29,9 @@ def site_settings(request):
     site_id = site_dict['site_id']
     site_values = SiteSetup.objects.filter(site_id=site_id)
     for f in site_values:
+        # print("function settings: " + f.afield + ":" + f.avalue)
         site_dict[f.afield] = f.avalue
+    # print(site_dict)
     return site_dict
 
 
