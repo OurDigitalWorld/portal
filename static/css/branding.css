@@ -1,0 +1,360 @@
+/* OurOntario TEST PORTAL branding - Django version - Jan2023
+************************************************** */
+
+
+/* Banner - ENG			
+************************************************** */
+#banner_eng {
+	width: 100%;
+	height: 188px;
+	margin: 0;
+	padding: 0;
+	background: url("https://images.ourontario.ca/partners/OurOntario/graphics/OObanner_eng-1000.png") no-repeat top left;
+}
+
+/* Banner - FRE			
+************************************************** */
+#banner_fre {
+	width: 100%;
+	height: 188px;
+	margin: 0;
+	padding: 0;
+	background: url("https://images.ourontario.ca/partners/OurOntario/graphics/OObanner_fre-1000.png") no-repeat top left;
+}
+
+/* SEARCH bar (ENG) & (FRE)
+************************************************** */
+#search_eng, #search_fre {
+	float: none;
+	padding-bottom: 20px;
+	margin: auto;
+	display: block;
+}	
+	
+#search_eng>form, #search_fre>form {
+	float: none;
+	padding: 0;
+	margin: auto;
+	display: inline-block;
+}
+	
+	
+/* BROWSE (ENG) & (FRE)
+************************************************** */
+.browseby {
+	/*width: 800px;*/	
+	width: 75%;
+	margin: auto;
+	height: 90px;
+  	border-radius: 10px;
+	/*background-image: linear-gradient(to bottom, white 18.9%, #d6dee7 100%);*/
+	padding-bottom: 10px;
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: space-evenly;
+	background-color: #f9f9f9;
+	text-align: center;
+}
+
+.browseby ul#browse_eng, .browseby ul#browse_fre {
+	margin: auto;
+	padding-top: 0;
+	display: block;
+}
+
+ul#browse_eng li, ul#browse_fre li {
+ 	display: inline-block;
+ 	/*width: 200px;*/
+	padding: 10px;
+	/*margin: 0;*/
+	text-align: center;
+}
+
+	
+ul#browse_eng li a, ul#browse_fre li a {
+	height: 22px;
+	padding: 25px;	
+	/*margin: 0;*/
+	text-align: center;
+	font-size: 1.2em;
+}
+
+ul#browse_eng li a::before, ul#browse_fre li a::before {
+    content: '◇ ';
+}
+	
+ul#browse_eng li a:hover, ul#browse_fre li a:hover {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
+	opacity: 0.7;
+}
+	
+/* BROWSE-by (ENG buttons)
+************************************************** 	
+a.browse-audio_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyAudio.png") no-repeat top left; z-index: 1;}
+a.browse-exhibit_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyExhibits.png") no-repeat top left; z-index: 1;}
+a.browse-genealogy_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyGenealogy.png") no-repeat top left; z-index: 1;}
+a.browse-images_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyImages.png") no-repeat top left; z-index: 1;}
+a.browse-newspaper_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyNewspapers.png") no-repeat top left; z-index: 1;}
+a.browse-object_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyObjects.png") no-repeat top left; z-index: 1;}
+a.browse-text_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyTexts.png") no-repeat top left; z-index: 1;}
+a.browse-video_eng {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyVideos.png") no-repeat top left; z-index: 1;}*/
+				
+/* BROWSE-by (FRE buttons)
+************************************************** 
+a.browse-audio_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyAudio.png") no-repeat top left; z-index: 1;}
+a.browse-exhibit_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyExhibits-f.png") no-repeat top left; z-index: 1;}
+a.browse-genealogy_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyGenealogy-f.png") no-repeat top left; z-index: 1;}
+a.browse-images_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyImages.png") no-repeat top left; z-index: 1;}
+a.browse-newspaper_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyNewspapers-f.png") no-repeat top left; z-index: 1;}
+a.browse-object_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyObjects-f.png") no-repeat top left; z-index: 1;}
+a.browse-text_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyTexts-f.png") no-repeat top left; z-index: 1;}
+a.browse-video_fre {background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/BROWSEbyVideos-f.png") no-repeat top left; z-index: 1;}*/
+
+
+/* Home Page CONTENT block 
+****************************************/
+
+#content .left50 h1 {
+	font-size: 2em;
+	color: #345C88;
+}
+
+#content .left50 p {
+	font-size: 1.2em;
+	margin-left: 1.5em;
+}
+
+/* ABOUT Page CONTENT block 
+*********************************/
+
+.left67 h1 {
+	font-size: 2em;
+	color: #345C88;	
+	margin-top: 15px !important;
+
+}
+
+.left67 h2 {
+	font-size: 1.5em;
+	color: #345C88;
+	margin-top: 35px !important;
+}
+
+.contentText p, .content p {
+	font-size: 1em;
+	margin-left: 1.5em;
+}
+
+/* ABOUT page spacing layout override
+************************************************** */
+.thirdright h2 {
+	margin-top: 25px !important;
+}
+
+
+/* TOP SEARCH SECTION (for results page)
+************************************************** */
+#searchheader_eng {
+	height: 74px;
+	width: 1000px;
+	background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/search_results_bg_eng.png") no-repeat top left;
+	}
+#searchheader_fre {
+	height: 74px;
+	width: 1000px;
+	background: transparent url("https://images.ourontario.ca/partners/OurOntario/graphics/search_results_bg_fre.png") no-repeat top left;
+	}	
+	
+#searchheader_eng *, #searchheader_fre * {
+	text-indent: -9999em;
+	padding: 0;
+	margin: 0;
+	}
+#searchheader_eng h3, #searchheader_fre h3 {
+	float: left;
+	width: 180px;
+	height: 74px;
+	}
+#searchheader_eng h4, #searchheader_fre h4 {
+	float: right;
+	width: 136px;
+	}
+#searchheader_eng h3 a, #searchheader_eng h4 a, #searchheader_fre h3 a, #searchheader_fre h4 a{
+	display: block;
+	height: 74px;
+	}
+
+ /* CONTRIBUTORS cloud
+************************************************** */
+.contributorCloud {
+	margin: auto;
+	/*width: 85%  !important;*/
+	width: 100%  !important;
+	text-align: center;
+}
+.contributorCloud ul {
+	display: block;
+}
+
+.contributorCloud ul li {
+	display: inline-block;
+	padding: 10px;
+}
+
+ /* HELP
+************************************************** */
+.help {
+	float: none;
+}
+.help h1 {
+	text-align: left;
+	padding-top: 10px;
+	padding-bottom: 15px;
+}
+
+/*new Alternate formats block
+************************************************** */
+.alternateFormats {
+	border-top: 1px solid #576896;
+	clear: both;
+	color: #393838;
+	font-weight: normal;
+	font-style: normal;
+	display: block;
+	font-size: .85em;
+	text-align: right;
+}
+
+	
+ /* FOOTER - Social + Contact + Branding (three columns)
+************************************************** */
+#page_end {
+	float: none;
+	clear: both;
+}
+.full_footer {
+	position:  relative;
+	top: 1em;
+	display:flex;
+	flex-flow: row wrap;
+	justify-content: space-evenly;
+	align-content: flex-end;
+	background-image: linear-gradient(to bottom, #ffffff 11.8%, white 31.5%, #345C88 100%);
+	/*background-color: #345C88;*/
+	padding: 0;
+	margin: 0;
+}
+.full_footer a:link {
+	color:#FFFFFF;
+}
+.full_footer a:visited {
+	color:#FFFFFF;
+}
+.full_footer a:hover {
+	color:#FFFFFF;
+}
+.full_footer a:active {
+	color:#FFFFFF;
+}
+
+.social_follow {
+	flex: 1;
+	color: #fff;
+	height: 90px;
+	font-size: 1.1em;
+	padding-top: 2em;
+	position: relative;
+	bottom: -20px;
+}
+.follow-button__link,
+.follow-button__icon {
+  display: inline-block
+}
+
+a.follow-button__link:link,a.follow-button__link:visited, a.follow-button__link:active  {
+  text-decoration: none;
+  color: #fff;
+}
+.follow-button {
+  border-radius: 5px;
+  transition: 25ms ease-out;
+  padding: 5px;
+  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+   border: 1px solid white;
+}
+.follow-button__icon svg {
+  width: 4em;
+  height: 4em;
+  margin-right: 0.4em;
+  vertical-align: top;
+}
+.follow-button--small svg {
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* Non solid icons get a stroke */
+.follow-button__icon {
+  stroke: #fff;
+  fill: none;
+}
+
+/* Solid icons get a fill */
+.follow-button__icon--solid,
+.follow-button__icon--solidcircle {
+  fill: #fff;
+  stroke: none;
+}
+.follow-button--facebook {
+  background-color: #3b5998;
+  /*border-color: #3b5998;*/
+  border-color: #ffffff;
+}
+.follow-button--facebook:hover,
+.follow-button--facebook:active {
+  background-color: #2d4373;
+  /*border-color: #2d4373;*/
+  border-color: #ffffff;
+}
+.follow-button--twitter {
+  background-color: #55acee;
+  /*border-color: #55acee;*/
+  border-color: #ffffff;
+}
+.follow-button--twitter:hover,
+.follow-button--twitter:active {
+  background-color: #2795e9;
+  /*border-color: #2795e9;*/
+  border-color: #ffffff;
+}
+
+.footer_contact {
+	flex: 2;
+	height: 100px;
+	padding-top: 4em;
+	margin-bottom: -60px;
+}
+.footer_contact p {
+	margin: 0;
+	padding: 5px;
+}
+
+.footer_contact a:link {
+	color:#FFFFFF;
+	font-size: 1.2em;
+}
+
+.odw_brand {
+	flex: 1;
+	color:#FFFFFF;
+	/*background-color: #ccc;*/
+	height: 85px;
+	font-size: .9em;
+}	
+.odw_brand img {
+	height: 75px;
+}
+.odw_brand a:link {
+	color:#FFFFFF;
+}
+

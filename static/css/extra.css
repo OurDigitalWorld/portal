@@ -1,0 +1,579 @@
+/* RESULTS VIEW  - djangobuild* Apr 2015/
+
+.columns {
+	columns: 2;
+  	column-fill: balance;
+  	column-gap: 1em;
+  	column-rule: thin solid black;
+}
+
+/* VIEWS Buttons
+*********************************************/
+img#listview, img#thumbListview, img#galleryview, img#\000032colview {
+	background-color: #f4f4f4;
+	border-top: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	display: inline-block;
+	padding: 5px;
+	margin: 10px 0 0;
+}
+
+/* VIEWS
+*********************************************/
+#resultList {
+	list-style-type: none;
+	list-style-image: none;
+	padding: 2px 0;
+	float: left;
+	margin: 0;
+	width: 60%;
+}
+
+.list ul {
+	list-style-type: none;
+	list-style-image: none;
+  	/*width: 68%;*/
+  	overflow:hidden;
+	margin: 0;
+	padding-bottom: 20px;
+	
+}
+
+.list li {
+	list-style-type: none;
+	list-style-image: none;
+    padding: 2px 0 20px;
+	display: inline-block;
+	width:100%;
+	margin-bottom: 5px;
+}
+
+.list li .thumbbox {
+	display: none;
+}
+
+.list li img {
+	display: none;
+}
+
+.list li .description {
+	text-align: left;
+	display: inline;
+	margin-top: 5px;
+	padding-left: 8px;
+}
+
+.list li .description_truncate {
+    display: none;
+}
+.list li a {
+	/* no border is a hack for IE/FF to turn off link box */
+	border: 0px;
+	margin-bottom: 5px;
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+
+.single ul {
+	list-style-type: none;
+	list-style-image: none;
+  	/*width: 68%;*/
+  	overflow:hidden;
+	margin: 0;
+	padding-bottom: 20px;
+}
+
+.single li {
+	list-style-type: none;
+	list-style-image: none;
+    padding: 2px 0 2px;
+	display: inline-block;
+	width:100%;
+	margin-bottom: 5px;
+	/*max-height: 156px;*/
+	/*max-height: 200px;*/
+	max-height: 380px;
+	overflow: hidden;
+	border-bottom: 1px solid #eaeaea;
+}
+
+.site {
+	float: right;
+	margin-right: 50px;
+}
+
+
+.single li .thumbbox {
+	width: 155px;
+	height: 154px;
+	padding-right: 2px;
+	padding-left: 2px;
+	margin-left: 3px;
+	float: left;
+}
+
+
+.single li .thumbbox img {
+	max-width: 150px;
+	border: 0px;
+	vertical-align: middle;
+	padding: 0;
+	margin: 0 3px 0 0;
+	border-style: none;
+	border-width: 0px;
+}
+
+.single li .description {
+	text-align: left;
+	display: inline;
+	margin-top: 5px;
+	padding-left: 8px;
+
+}
+
+.single li .description_truncate {
+    display: none;
+}
+.single li a {
+	/* no border is a hack for IE/FF to turn off link box */
+	border: 0px;
+	margin-bottom: 5px;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.double ul {
+	list-style-type: none;
+	list-style-image: none;
+  	/*width: 68%;*/
+  	overflow:hidden;
+	margin: 0;
+	padding-bottom: 20px;
+}
+
+.double li {
+	list-style-type: none;
+	list-style-image: none;
+  	line-height:1.2em;
+ 	float:left;
+ 	display: block;
+ 	width:45%;
+ 	padding: 0 10px 10px 0;
+	/*border-bottom: 1px solid #d5d5d5;*/
+	box-shadow: 2px 2px 1px #eeeded;
+	margin-bottom: 8px;
+	margin-right: 15px;
+}
+
+.double li .thumbbox {
+	width: 155px;
+	padding-right: 2px;
+	padding-left: 2px;
+	margin-left: 3px;
+	float: left;
+}
+
+.double li .thumbbox img  {
+	vertical-align: middle;
+	padding: 0;
+	margin: 0 3px 0 0;
+	border-style: none;
+	border-width: 0px;
+}
+
+.double li a{
+	/* no border is a hack for IE/FF to turn off link box */
+	border: 0px;
+	font-size: 1em;
+	font-weight: bold;
+}
+
+.double li .description {
+    display: none;
+}
+
+.double li .description_truncate {
+	text-align: left;
+	margin-top: 2px;
+}
+
+.gallery ul {
+	list-style-type: none;
+	list-style-image: none;
+  	/*width: 68%;*/
+  	overflow:hidden;
+	margin: 0;
+	padding-bottom: 20px;
+
+  	/*border-top:1px solid #ccc;*/
+}
+
+.gallery li {
+	list-style-type: none;
+	list-style-image: none;
+  	/* line-height:1.2em;
+ 	border-bottom:1px solid #ccc;*/
+ 	float:left;
+ 	/*display: table-cell;
+ 	height:170px;
+	width:170px;
+	padding:6px;*/
+	display: inline;
+	height:220px;
+	max-width: 170px;  
+	text-decoration: none;
+	margin-bottom: 15px;
+  	margin-right: 5px; 	
+  	border-right: 1px solid #eaeaea;
+  	border-bottom: 1px solid #eaeaea;
+	-moz-border-radius: 8px; 
+	-webkit-border-radius: 8px; 
+	border-radius: 8px;
+	box-shadow: 2px 2px 2px #eeeded;
+	padding: 0px 5px 15px 0px;
+}
+
+.gallery li .thumbbox {
+	width: 152px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
+	margin-left: 3px;
+	float: left;
+}
+
+.gallery .thumbbox img  {
+	padding: 0;
+	margin: 0 3px 0 0;
+	border-style: none;
+	border-width: 0px;
+}
+
+.gallery li a{
+	font-size: .7em;
+	text-decoration: none;
+    padding: 0;
+	max-width: 180px;
+	border-width: 0;
+}
+
+.gallery li .description {
+	display: none;
+}
+
+.gallery li .description_truncate {
+	display: none;
+}
+
+/* GALLERY VIEW - Results page*/
+
+.detailsGallery {
+	background: #FFFFFF;
+	background-image: none;
+	padding: 10px 2px;
+	border-top: 1px solid #9FA7BC;
+	min-width: 500px;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px;
+	z-index: 1;
+}
+
+ .galleryPictureFlow {
+	display: inline;
+	float: left;
+	/*height:150px;*/
+	border: 0; 
+	text-decoration: none;
+	margin: 5px 4px 5px 2px;
+} 
+.galleryPictureFlow img {
+	border: 0;
+	margin: 0 3px 0 0;
+	clear: left;
+}
+
+.galleryPictureFlowCell {
+	/*background-image: url(https://images.ourontario.ca/static/img/tablebg3.png) repeat-y left;*/
+	/*background: #c0c0c0;*/
+	font: .9em "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	/*display: block;*/
+	/*text-align: center;*/
+	color: #212121;
+	background: #eaeaea;
+	height:240px;
+	width:170px;
+	padding:6px;
+	/*padding-bottom: 2px;
+	padding-left: 2px;
+	padding-right: 2px;
+	border: 1px solid #EEEEEE;*/
+	/*border-bottom: 3px solid #212121;
+	border-right: 3px solid #212121;*/
+	border-bottom: 1px solid #5e5e5e;
+	border-right: 1px solid #5e5e5e;
+	/*min-width: 500px;*/
+	/*margin: 0 10px 10px;*/
+	-moz-border-radius: 9px; 
+	-webkit-border-radius: 9px; 
+	border-radius: 9px;
+	z-index: 1;
+}
+	
+.galleryPictureFlowCaption {
+	display: table-caption;
+	/*text-align: center;*/
+}
+
+/* MULTIpage Results (docParts)
+*************************************** */
+.docParts {
+	background-color: #fbfbfb;
+	border-top: 1px solid #c0c0c0;
+	border-bottom: 1px solid #c0c0c0;
+	-moz-border-radius: 5px; 
+	-webkit-border-radius: 5px; 
+	border-radius: 5px;
+	padding-bottom: 3px;
+	padding-left: 6px;
+	padding-right: 6px;
+	z-index: 1;
+	margin: 3px 3px 3px 160px;
+	width: 65%;
+}
+.docPartsLabel {
+	font-size: .9em;
+	color: #808080;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.docPart {
+	display: inline;
+	padding-left: 8px;
+	font-size: .9em;
+	color: #808080;
+}
+.docPart a:hover {
+	background: #d5d5d5;
+	font-weight: bold;
+}
+
+.pagePartsLabel {
+	font-size: .9em;
+	font-weight: bold;
+	font-style: italic;
+	display: inline;
+}
+.pageParts {
+	font-size: .9em;
+}
+.pagePart {
+	display: inline;
+	padding-left: 8px;
+}
+.pagePart a:hover {
+	background: #d5d5d5;
+	font-weight: bold;
+}
+.docPartAll {
+	display: inline;
+	padding-left: 25px;
+	font: .75em;
+}
+
+.docPartAll a:hover {
+	background: #d5d5d5;
+	font-weight: bold;
+}
+
+
+/* Alt SEARCH Results Boxes
+*************************************** */
+#altContent {
+	width: 897px;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+	padding-bottom: 10px;
+	text-align: left;
+}
+	
+.altResultBox {
+	width: 45%;	
+	overflow: auto;
+	float: left;
+	margin: .5em 10px 1em 0;
+	padding: 1em 1em 1.4em;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0px 2px 1px #eaeaea;
+	height: 500px;
+}
+
+.altResultMore {
+	text-align: right;
+	font-weight: bold;
+}
+
+.altResultBox h2 {
+	margin: 0;
+	padding: 0;
+}
+
+
+.altResultBox h2 img {
+	margin: 0;
+	padding: 0;
+}
+
+
+.altResultBox h3 {
+	color: #3E1E7C;
+	font-family:Georgia,serif;
+	font-size:1.50em;
+	letter-spacing:-0.04em;
+	line-height:120%;	
+	margin: 0;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	background: #a8cfe7 url("https://images.ourontario.ca/static/img/easyform_bg3.png") repeat-x top;
+	padding: 3px 0 3px 10px;
+}
+
+.leftfloat {
+	float: left;
+	clear: left;
+}
+.rightfloat {
+	float: right;
+	clear: right;
+}
+
+/* ADVANCED SEARCH FORM
+********************************* */
+
+.AdvSearchForm {
+	position: relative;
+    width: 850px;
+	padding: 15px 15px 25px;
+	border-radius:8px;
+	border-left: 1px solid #e6e6e6;
+	margin: auto;
+	background: #FBFBFB url(https://images.ourontario.ca/static/img/tablebg2.png) repeat-y right;
+	margin-top: 20px;
+	box-shadow: 1px 1px 1px #cccccc;
+}
+
+.AdvSearchForm fieldset {
+	width: 825px;
+	margin: .5em 0 1em 0;
+	padding: 1em;
+	border: 1px solid #cccccc;
+	/*background: #eee url(https://images.ourontario.ca/static/img/easyform_bg.png) repeat-x;*/
+	background: #ffffff;
+}
+.AdvSearchForm fieldset legend{
+	text-transform: uppercase;
+	color: #6d6c6c;
+	padding-right: 15px;
+	padding-left: 15px;
+	background: #ffffff;
+}
+
+
+.AdvSearchForm fieldset#contributor select {
+	height: 80px;
+}
+
+.AdvSearchForm fieldset#location input{
+	display: inline;
+}
+
+.AdvSearchForm p {
+	display: inline-block;
+	font-size: .90em;
+	color: #6d6c6c;
+	float: left;
+	padding-right: 10px;
+	text-align: left;
+}
+
+.AdvSearchForm fieldset#keyword .keyword, .mediatype {
+	float: left;
+	display: block;
+	width: 100%;
+}
+
+#logic .logicblock {
+	float: left;
+	width: 30%;
+
+	margin-top: 0;
+	padding-top: 0;
+}
+#keyword .logicblock label {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	font-size: .7em;
+	font-weight: bold;
+}
+
+.AdvSearchForm fieldset#mediatype ul li{
+display: inline-block;
+color:#666666;
+font-weight: normal;
+font-size:0.9em;
+text-transform: none;
+text-indent:0;
+margin: 0;
+font-style: normal;
+}
+
+.advsrchformbase {
+	width: 825px;
+	margin: 1em 0;
+	padding: 1em;
+	border: none;
+	display: inline;
+}
+.advsrchformbase .logicblock {
+	float: left;
+	width:40%;
+	padding: 0;
+	display: inline;
+	clear: none;
+	margin: 0;
+}
+.advsrchformbase .logicblock p, select, input {
+	display: inline;
+}
+
+.advsrchformbase .logicblock select {
+	position: relative;
+	top: 5px;
+}
+.advsrchformbase .logicblock input {
+	position: relative;
+	top: -5px;
+}
+
+
+/* FIELDSET blanking for accessibility labelling of mandatory fieldsets and legends where we just want checkboxes
+************************************************************ */
+fieldset.undecorated {
+	width: 825px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: #ffffff;
+}
+
+fieldset.undecorated  legend {
+	color: white;
+}
+
